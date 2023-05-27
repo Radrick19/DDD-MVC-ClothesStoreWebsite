@@ -1,0 +1,223 @@
+﻿@using Store.API.ViewModels.Components;
+@model MobileDropDownViewModel
+<div class="button-drop-main-menu">
+    <div class="content-wrapper">
+        <div class="content">
+            @Html.HiddenFor(x=>x.WomenCategoryName)
+            @Html.HiddenFor(x=>x.MenCategoryName)
+            @Html.HiddenFor(x=>x.KidsCategoryName)
+            @Html.HiddenFor(x=>x.BabyCategoryName)
+
+            <nav class="nav flex-column mobile-dropdown-menu">
+                <div class="category-selection">
+                    <a class="nav-link select-women">ЖЕНЩИНЫ</a>
+                    <hr />
+                    <a class="nav-link select-men">МУЖЧИНЫ</a>
+                    <hr />
+                    <a class="nav-link select-kids">ДЕТИ</a>
+                    <hr />
+                    <a class="nav-link select-baby">МЛАДЕНЦЫ</a>
+                </div>
+                <div class="search-type-selection">
+                    <div class="backbutton-and-info">
+                        <div>
+                            <a class="search-type-backbutton backbutton"> <img src="~/images/icons/back.png" /></a>
+                        </div>
+                        <div class="selected-category">
+                            <h2 class="selected-category-info"></h2>
+                        </div>
+                    </div>
+                    <div class="category-to-select">
+                        <a class="nav-link select-bycollection">ПО КОЛЛЕКЦИЯМ</a>
+                        <hr />
+                        <a class="nav-link select-bycategory">ПО КАТЕГОРИЯМ</a>
+                    </div>
+                </div>
+                <div class="subcategory-selection-women filter-selection">
+                    <div class="backbutton-and-info">
+                        <div>
+                            <a class="select-category-backbutton backbutton"> <img src="~/images/icons/back.png" /></a>
+                        </div>
+                        <div>
+                            <div class="selected-category">
+                                <h2>Женщины</h2>
+                            </div>
+                            <div class="selected-search-type">
+                                <h2>Поиск по категориям</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subcategories-to-select">
+                        @foreach (var item in Model.WomenSubcategories)
+                        {
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-categoryName="women" asp-route-subcategoryName="@item.Name" class="nav-link">@item.DisplayName</a>
+                            <hr />
+                        }
+                    </div>
+                </div>
+                <div class="subcategory-selection-men filter-selection">
+                    <div class="backbutton-and-info">
+                        <div>
+                            <a class="select-category-backbutton backbutton"> <img src="~/images/icons/back.png" /></a>
+                        </div>
+                        <div>
+                            <div class="selected-category">
+                                <h2>Мужчины</h2>
+                            </div>
+                            <div class="selected-search-type">
+                                <h2>Поиск по категориям</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subcategories-to-select">
+                        @foreach (var item in Model.MenSubcategories)
+                        {
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-categoryName="men" asp-route-subcategoryName="@item.Name" class="nav-link">@item.DisplayName</a>
+                            <hr />
+                        }
+                    </div>
+                </div>
+                <div class="subcategory-selection-kids filter-selection">
+                    <div class="backbutton-and-info">
+                        <div>
+                            <a class="select-category-backbutton backbutton"> <img src="~/images/icons/back.png" /></a>
+                        </div>
+                        <div>
+                            <div class="selected-category">
+                                <h2>Дети</h2>
+                            </div>
+                            <div class="selected-search-type">
+                                <h2>Поиск по категориям</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subcategories-to-select">
+                        @foreach (var item in Model.KidsSubcategories)
+                        {
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-categoryName="kids" asp-route-subcategoryName="@item.Name" class="nav-link">@item.DisplayName</a>
+                            <hr />
+                        }
+                    </div>
+                </div>
+                <div class="subcategory-selection-baby filter-selection">
+                    <div class="backbutton-and-info">
+                        <div>
+                            <a class="select-category-backbutton backbutton"> <img src="~/images/icons/back.png" /></a>
+                        </div>
+                        <div>
+                            <div class="selected-category">
+                                <h2>Младенцы</h2>
+                            </div>
+                            <div class="selected-search-type">
+                                <h2>Поиск по категориям</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subcategories-to-select">
+                        @foreach (var item in Model.BabySubcategories)
+                        {
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-categoryName="baby" asp-route-subcategoryName="@item.Name" class="nav-link">@item.DisplayName</a>
+                            <hr />
+                        }
+                    </div>
+                </div>
+                <div class="collection-selection-women filter-selection">
+                    <div class="backbutton-and-info">
+                        <div>
+                            <a class="select-category-backbutton backbutton"> <img src="~/images/icons/back.png" /></a>
+                        </div>
+                        <div>
+                            <div class="selected-category">
+                                <h2>Женщины</h2>
+                            </div>
+                            <div class="selected-search-type">
+                                <h2>Поиск по коллекциям</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collections-to-select">
+                        <a asp-controller="Catalog" asp-action="Index" asp-route-categoryName="women" class="nav-link">Вся женская одежда</a>
+                        <hr />
+                        @foreach (var item in Model.WomenCollections)
+                        {
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-collectionName="@item.Name" asp-route-categoryName="women" class="nav-link">@item.DisplayName</a>
+                            <hr />
+                        }
+                    </div>
+                </div>
+                <div class="collection-selection-men filter-selection">
+                    <div class="backbutton-and-info">
+                        <div>
+                            <a class="select-category-backbutton backbutton"> <img src="~/images/icons/back.png" /></a>
+                        </div>
+                        <div>
+                            <div class="selected-category">
+                                <h2>Мужчины</h2>
+                            </div>
+                            <div class="selected-search-type">
+                                <h2>Поиск по коллекциям</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collections-to-select">
+                        <a asp-controller="Catalog" asp-action="Index" asp-route-categoryName="men" class="nav-link">Вся мужская одежда</a>
+                        <hr />
+                        @foreach (var item in Model.MenCollections)
+                        {
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-collectionName="@item.Name" asp-route-categoryName="men" class="nav-link">@item.DisplayName</a>
+                            <hr />
+                        }
+                    </div>
+                </div>
+                <div class="collection-selection-kids filter-selection">
+                    <div class="backbutton-and-info">
+                        <div>
+                            <a class="select-category-backbutton backbutton"> <img src="~/images/icons/back.png" /></a>
+                        </div>
+                        <div>
+                            <div class="selected-category">
+                                <h2>Дети</h2>
+                            </div>
+                            <div class="selected-search-type">
+                                <h2>Поиск по коллекциям</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collections-to-select">
+                        <a asp-controller="Catalog" asp-action="Index" asp-route-categoryName="kids" class="nav-link">Вся детская одежда</a>
+                        <hr />
+                        @foreach (var item in Model.KidsCollections)
+                        {
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-collectionName="@item.Name" asp-route-categoryName="kids" class="nav-link">@item.DisplayName</a>
+                            <hr />
+                        }
+                    </div>
+                </div>
+                <div class="collection-selection-baby filter-selection">
+                    <div class="backbutton-and-info">
+                        <div>
+                            <a class="select-category-backbutton backbutton"> <img src="~/images/icons/back.png" /></a>
+                        </div>
+                        <div>
+                            <div class="selected-category">
+                                <h2>Младенцы</h2>
+                            </div>
+                            <div class="selected-search-type">
+                                <h2>Поиск по коллекциям</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collections-to-select">
+                        <a asp-controller="Catalog" asp-action="Index" asp-route-categoryName="baby" class="nav-link">Вся одежда для малышей</a>
+                        <hr />
+                        @foreach (var item in Model.BabyCollections)
+                        {
+                            <a asp-controller="Catalog" asp-action="Index" asp-route-collectionName="@item.Name" asp-route-categoryName="baby" class="nav-link">@item.DisplayName</a>
+                            <hr />
+                        }
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

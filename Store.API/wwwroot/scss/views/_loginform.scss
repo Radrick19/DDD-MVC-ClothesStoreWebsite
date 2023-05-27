@@ -1,0 +1,42 @@
+.form-content form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+    margin-bottom: 100px;
+
+    .validation-summary-errors {
+        margin: 20px 0px;
+
+        ul li {
+            color: red;
+        }
+    }
+
+    h1 {
+        font-size: 35px;
+    }
+
+    input {
+        padding: 5px 10px;
+        text-align: center;
+    }
+
+    input[type=submit] {
+        margin-bottom: 30px;
+        padding: 10px 45px;
+        background-color: rgba(236, 29,35, 0.9);
+        color: white;
+        font-weight: 700;
+        border: 0px;
+
+        &:hover {
+            background-color: rgba(230, 29,35, 0.8);
+        }
+    }
+}
+
+.login-input-field {
+    margin-bottom: 30px;
+}
+/**/

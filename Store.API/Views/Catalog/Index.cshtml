@@ -1,0 +1,94 @@
+﻿@using Store.API.ViewModels.Catalog;
+@using Store.Application.Enums;
+@model ShowCatalogViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="nav-line">
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="filter-article-handler">
+                <ul class="filter-content">
+                    @if(@Model != null && @Model.Breadcrumbs != null){
+                    @foreach (var item in Model.Breadcrumbs)
+                    {
+                        <li class="breadcrumb-line">
+                            @if (item.IsActive)
+                            {
+                                <a href="@item.Url">@item.Title</a>
+                            }
+                            else
+                            {
+                                <p>@item.Title</p>
+                            }
+                        </li>
+                    }
+                    }
+                </ul>
+                <div class="article-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="category-name-line">
+    <div class="content-wrapper">
+        <div class="content">
+            @if(@Model != null && @Model.SectionName != null){
+                <h1>@Model.SectionName</h1>
+            }
+        </div>
+    </div>
+</div>
+<div class="description-line">
+    <div class="content-wrapper">
+        <div class="content">
+                @if(@Model != null && @Model.SectionDescription != null){
+                    <span class="description-content">@Model.SectionDescription</span>
+                }
+        </div>
+    </div>
+</div>
+<div class="filer-itemscount-line">
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="filer-itemscount-content">
+                <div class="sorting">
+                    <label>Сортировать: </label>
+                    <select id="sorting-selection">
+                        <option value="1">по популярности</option>
+                        <option value="2">по возрастанию цены</option>
+                        <option value="3">по убыванию цены</option>
+                        <option value="4">по новизне</option>
+                    </select>
+                </div>
+                <div class="items-count">
+                    <div class="count">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="products-line">
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="products-content">
+                    @Html.HiddenFor(x=>x.CategoryId)
+                    @Html.HiddenFor(x=>x.SubcategoryId)
+                    @Html.HiddenFor(x=>x.CollectionId)
+                    @Html.HiddenFor(x=>x.SearchText)
+                    <div class="grid-content">
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="pagination-line">
+</div>
+<script src="/scripts/catalog/getproducts.js" asp-append-version="true"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="application/javascript" src="/scripts/select2.js" charset="utf-8" asp-append-version="true"></script>
+
+

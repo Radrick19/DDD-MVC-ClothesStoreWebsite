@@ -1,0 +1,33 @@
+﻿@using Store.Application.Dto.Product;
+@model IEnumerable<ProductCatalogDto>
+@if(Model!= null && Model.Count() != 0){
+    @foreach (var item in @Model)
+    {
+        <div class="product-item">
+            <a asp-controller="Catalog" asp-action="Details" asp-route-productArticle="@item.Article">
+                <div class="image-holder">
+                    @{
+                        string imageUrl = $"/{item.MainPicture}";
+                    }
+                    <img src="@imageUrl" />
+                </div>
+            </a>
+            <div class="color-picker-line">
+                <div class="catalog-color-row">
+                    @foreach (var color in item.Colors)
+                    {
+                        <a asp-controller="Catalog" asp-action="Product" asp-route-productArticle="@item.Article"
+                           asp-route-colorName="@color.Color.Name" style="background-color: @color.Color.Hex" class="ColorSquare"> </a>
+                    }
+                </div>
+            </div>
+            <div class="name-price-line">
+                <a asp-controller="Catalog" asp-action="Details" asp-route-productArticle="@item.Article" class="product-name">@item.Name</a>
+                <p class="product-price">@item.Price ₽</p>
+            </div>
+        </div>
+    }
+}
+else{
+    <h3>К сожалению, ничего не найдено</h3>
+}

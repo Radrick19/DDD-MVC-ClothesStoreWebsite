@@ -1,0 +1,170 @@
+﻿@using Store.API.ViewModels.Catalog;
+@model DetailsCatalogViewModel
+@{
+    Layout = "_Layout";
+}
+@{
+    var mainPicture = $"/{Model.Product.MainPicture}";
+}
+<div class="nav-line">
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="filter-article-handler">
+                <ul class="filter-content">
+                    @foreach (var item in Model.Breadcrumbs)
+                    {
+                        <li class="breadcrumb-line">
+                            @if (item.IsActive)
+                            {
+                                <a href="@item.Url">@item.Title</a>
+                            }
+                            else
+                            {
+                                <p>@item.Title</p>
+                            }
+                        </li>
+                    }
+                </ul>
+                <div class="article-content">
+                    @if (Model.Product.Article != null)
+                    {
+                        string article = $"#{Model.Product.Article}";
+                        <p>@article</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content-wrapper">
+    <div class="content">
+        <div class="product-info">
+            <div class="carousel-main-picture">
+                <div class="carousel">
+                    <section class="splide" id="side-splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <li class="splide__slide">
+                                    <img src="@mainPicture">
+                                </li>
+                                @foreach(var item in Model.Product.AdditionalPictures)
+                                {
+                                    var link = $"/{item}";
+                                    <li class="splide__slide">
+                                        <img src="@link">
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+                <div class="main-picture">
+                    <section class="splide" id="main-splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <li class="splide__slide">
+                                    <img src="@mainPicture">
+                                </li>
+                                @foreach (var item in Model.Product.AdditionalPictures)
+                                {
+                                    var link = $"/{item}";
+                                    <li class="splide__slide">
+                                        <img src="@link">
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="product-details">
+                <div class="product-name-price">
+                    <h3>@Model.Product.Name</h3>
+                    <div class="price">
+                        <b>@Model.Product.Price ₽</b>
+                    </div>
+                </div>
+                <div class="details-color-row">
+                    <p>Цвет: @Model.SelectedColor.Name</p>
+                    <div class="details-items-row">
+                        @foreach(var item in @Model.Product.Colors)
+                        {
+                            if(Model.SelectedColor.Name == item.Color.Name)
+                            {
+                                <a style="background-color: @item.Color.Hex" class="ColorSquare selected-item" asp-controller="Catalog"
+                           asp-action="Product" asp-route-productArticle="@Model.Product.Article" asp-route-colorName="@item.Color.Name"
+                           asp-route-sizeName="@Model.SelectedSize.Name"> </a>
+                            }
+                            else
+                            {
+                                <a style="background-color: @item.Color.Hex" class="ColorSquare" asp-controller="Catalog"
+                           asp-action="Product" asp-route-productArticle="@Model.Product.Article" asp-route-colorName="@item.Color.Name"
+                           asp-route-sizeName="@Model.SelectedSize.Name"> </a>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="details-sizes-row">
+                    <p>Размер: @Model.SelectedSize.Name</p>
+                    <div class="details-items-row">
+                        @foreach (var item in @Model.Product.Sizes)
+                        {
+                            if(Model.SelectedSize.Name == item.Size.Name)
+                            {
+                                <a class="selected-item" asp-controller="Catalog"
+                           asp-action="Product" asp-route-productArticle="@Model.Product.Article" asp-route-sizeName="@item.Size.Name"
+                           asp-route-colorName="@Model.SelectedColor.Name">@item.Size.Name</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Catalog"
+                           asp-action="Product" asp-route-productArticle="@Model.Product.Article" asp-route-sizeName="@item.Size.Name"
+                           asp-route-colorName="@Model.SelectedColor.Name">@item.Size.Name</a>
+                            }
+                        }
+                    </div>
+                </div>
+                <a asp-controller="Personal" asp-action="AddItemToCart" asp-route-article="@Model.Product.Article"
+                   asp-route-colorName="@Model.SelectedColor.Name" asp-route-sizeName="@Model.SelectedSize.Name" class="add-item-button">
+                    Добавить
+                </a>
+                @if (!string.IsNullOrEmpty(Model.Product.Material))
+                {
+                    <div class="product-details-info material-row">
+                        <b>Материал:</b>
+                        <p>@Model.Product.Material</p>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="product-delivery-info">
+            @if (!string.IsNullOrEmpty(Model.Product.CareInstuctions))
+            {
+                <div class="product-details-info">
+                    <b>Инструкция по уходу:</b>
+                    <p>@Model.Product.CareInstuctions<p>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.Product.Description))
+            {
+                <div class="product-details-info">
+                    <b>Описание:</b>
+                    <p>@Model.Product.Description<p>
+                </div>
+            }
+            <p><b>БЕСПЛАТНАЯ</b> Доставка</p>
+            @if (Model.Product.CanReturn)
+            {
+                <p>Возврат в течение 28 дней</p>
+            }
+        </div>
+        <div class="simular-products">
+            <h2>Вам может понравится</h2>
+            <div class="mini-simular-products">
+                @await Html.PartialAsync("ProductItems", Model.SimularProducts)
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/scripts/splide.min.js" asp-append-version="true"></script>
+<script src="/scripts/slidercontrol.js" asp-append-version="true"></script>

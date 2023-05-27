@@ -1,0 +1,82 @@
+@import "../_vars.scss";
+.button-drop-main-menu {
+    z-index: 4;
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    padding: 20px 0px;
+    background-color: $main-bg-color;
+    box-shadow: 0px 2px 5px 1px rgba(1, 0, 0, 0.2);
+    box-sizing: unset;
+    display: none;
+
+    a {
+        cursor: pointer;
+    }
+
+    ul {
+        height: 150px;
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+
+        li {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            font-size: 20px;
+        }
+    }
+
+    @media only screen and (min-width: 1000px) {
+        display: none !important;
+    }
+}
+
+.search-type-selection {
+    display: none;
+
+    h2 {
+        font-size: 16px;
+        text-align: right;
+    }
+}
+
+.filter-selection {
+    display: none;
+
+    h2 {
+        font-size: 16px;
+        text-align: right;
+    }
+}
+
+.category-to-select {
+    margin-top: 40px;
+}
+
+.subcategories-to-select {
+    margin-top: 40px;
+
+    :last-child {
+        border-width: 0px;
+    }
+}
+
+.collections-to-select {
+    margin-top: 40px;
+
+    :last-child{
+        border-width: 0px;
+    }
+}
+
+.backbutton-and-info{
+    display: flex;
+    justify-content: space-between;
+}
+
+.backbutton img{
+    height: 25px;
+    width: 25px;
+}

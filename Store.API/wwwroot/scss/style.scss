@@ -1,0 +1,42 @@
+@import "_vars.scss";
+@import "_normalize.scss";
+@import "views/_layout.scss";
+@import "views/_homeindex.scss";
+@import "views/_showcatalog.scss";
+@import "views/_showdetails.scss";
+@import "views/_loginform.scss";
+@import "views/_cart.scss";
+@import "views/_datamanagement.scss";
+@import "views/_error.scss";
+@import "components/_dropdownmenu.scss";
+@import "components/_mobiledropdownmenu.scss";
+@import "components/_mainmenuactions.scss";
+
+
+body {
+    background-color: #ffffff;
+    font-family: Segoe UI, Helvetica, Arial, sans-serif;
+}
+
+.content-wrapper {
+    max-width: $max-page-width;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.content {
+    padding-right: $space-page-padding;
+    padding-left: $space-page-padding;
+}
+
+.main-content {
+    padding-top: $height-header;
+}
+
+a{
+    font-size: 14px;
+}
+
+h3{
+    font-size: 16px;
+}

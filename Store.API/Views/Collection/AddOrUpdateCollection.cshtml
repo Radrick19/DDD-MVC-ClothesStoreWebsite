@@ -1,0 +1,59 @@
+﻿@using Store.API.ViewModels.Administration;
+@model CollectionAddOrUpdateViewModel
+@{
+    ViewData["Title"] = Model.PageTitle;
+    Layout = "~/Views/Shared/_DataManagementLayout.cshtml";
+}
+<div class="add-new-wrapper"> 
+<h1>@Model.PageHeader</h1>
+    @using(Html.BeginForm(Model.ActionName, "Collection", FormMethod.Post)){
+        @Html.HiddenFor(m => m.Collection.Id);
+        @Html.HiddenFor(m => m.PageTitle);
+        @Html.HiddenFor(m => m.PageHeader);
+        @Html.HiddenFor(m => m.ActionName);
+        @Html.HiddenFor(m => m.ButtonName);
+        <div class="add-new-prop">
+            <input type="text" asp-for="Collection.DisplayName" placeholder="Название" />
+            <span asp-validation-for="Collection.DisplayName"></span>
+        </div>
+        <div class="add-new-prop">
+            <input type="text" asp-for="Collection.Name" placeholder="Название для адресной строки" />
+            <span asp-validation-for="Collection.Name"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Collection.Order"></label>
+            <select asp-for="Collection.Order">
+                @for (int i = 1; i <= 10; i++)
+                {
+                    if(@Model.Collection.Order == i)
+                    {
+                        <option value="@i" selected="selected">@i</option>
+                    }
+                    else
+                    {
+                        <option value="@i">@i</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Collection.Order"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Collection.IsActual"></label>
+            @if (@Model.Collection.IsActual == true)
+            {
+                <input type="checkbox" asp-for="Collection.IsActual" checked />
+            }
+            else
+            {
+                <input type="checkbox" asp-for="Collection.IsActual" />
+            }
+            <span asp-validation-for="Collection.IsActual"></span>
+        </div>
+        <div class="add-new-prop">
+            <textarea asp-for="Collection.Description" placeholder="Описание"></textarea>
+            <span asp-validation-for="Collection.Description"></span>
+        </div>
+        <input type="submit" class="submit-button" value="@Model.ButtonName" />
+    }
+</div>
+

@@ -1,0 +1,226 @@
+@import "../_vars.scss";
+
+/* Top Bar Menu*/
+    header {
+        position: fixed;
+        width: 100%;
+        z-index: 3;
+        box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+        background-color: $main-bg-color;
+    }
+
+
+    .main-menu-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: $height-header;
+    }
+
+    .main-menu-category-logo {
+        display: flex;
+        align-items: center;
+        margin-right: 35px;
+
+        img {
+            height: 50px;
+            width: 53px;
+            margin-right: 30px;
+        }
+
+        ul {
+            display: flex;
+            align-items: stretch;
+            height: 70px;
+
+            li {
+                display: flex;
+            }
+
+            a {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 600;
+                padding: 0px 10px;
+            }
+
+            p {
+                border-color: $main-red-color;
+                border-width: 0px 0px 3px 0px;
+                mask-border-outset: -10px;
+            }
+
+            @media only screen and (max-width: 1000px) {
+                display: none;
+            }
+        }
+    }
+
+    .mobile-search {
+        display: none;
+
+        form {
+            height: $height-header;
+            z-index: 4;
+            background-color: white;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 10px 30px;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+        }
+
+        a img {
+            height: 12px;
+            width: 12px;
+        }
+
+        .search-input {
+            width: inherit;
+            font-size: 15px;
+            padding: 5px;
+        }
+
+        .search-button {
+            width: 50px;
+            border-width: 1px 1px 1px 0px;
+            margin-right: 40px;
+            cursor: pointer;
+            background-color: white;
+            background-image: url("/images/icons/search.svg");
+            background-position: center;
+            background-size: 30px;
+            background-repeat: no-repeat;
+        }
+
+        .close-mobile-search-button {
+            cursor: pointer;
+        }
+    }
+
+.main-menu-searchbar {
+    width: 100%;
+    max-width: 90%;
+    height: 40px;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 25px;
+
+    form {
+        display: flex;
+        width: 100%;
+    }
+
+    input {
+        padding: 10px;
+        font-size: 16px;
+        width: inherit;
+        border-width: 1px 0px 1px 1px;
+
+        &:focus {
+            outline-width: 0;
+        }
+    }
+
+    .search-button {
+        width: 45px;
+        background-color: white;
+        border-width: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        background-image: url("/images/icons/search.svg");
+        background-position: center;
+        background-size: 30px;
+        background-repeat: no-repeat;
+    }
+}
+
+    .nav-link {
+        text-align: center;
+        color: black;
+        font-size: 18px;
+
+        &:hover {
+            color: red;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+        .main-menu-searchbar {
+            display: none;
+        }
+    }
+
+    @media only screen and (max-width: 890px) {
+        .main-menu-category-logo {
+            margin-right: 0px;
+
+            img {
+                height: 50px;
+                width: 50px;
+                margin-left: 17px;
+            }
+        }
+
+        .main-menu-container {
+            justify-content: center;
+        }
+    }
+    /* Footer */
+
+    footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px 0px;
+        background-color: $darker-bg-color;
+
+        hr {
+            width: 80%;
+            border: 0;
+            border-top: 1px solid #ccc;
+        }
+
+        h2 {
+            font-size: 14px;
+            text-align: center;
+            font-weight: 400;
+            color: black;
+            padding: 20px 0px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 14px;
+            color: $darker-font-color;
+            padding-bottom: 10px;
+        }
+
+        .links-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+
+            a {
+                margin-bottom: 5px;
+                font-size: 14px;
+                padding-bottom: 10px;
+                color: #808080;
+
+                &:after {
+                    content: "|";
+                    margin: 0px 5px;
+                }
+
+                &:last-child:after {
+                    content: "";
+                }
+            }
+        }
+    }

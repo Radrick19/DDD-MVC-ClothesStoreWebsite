@@ -1,0 +1,97 @@
+@import "../_vars.scss";
+.cart-quantity-cycle {
+    position: absolute;
+    right: 12px;
+    bottom: -8px;
+    margin: 0px;
+    border-radius: 150px;
+    background-color: #ff0000;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    small {
+        color: white;
+        text-align: center;
+        font-size: 10px;
+    }
+}
+.main-menu-actions {
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    a {
+        cursor: pointer;
+    }
+
+    #account-actions {
+        display: none;
+        position: absolute;
+        height: 100px;
+        background-color: $darker-bg-color;
+        border-style: solid;
+        border-color: lightgray;
+        border-width: 0px 1px 1px 1px;
+        padding: 20px 20px;
+        top: $height-header;
+        margin-left: -50px;
+
+        a{
+            text-decoration: underline;
+        }
+
+        h5 {
+            font-size: 14px;
+        }
+    }
+
+    .mobile-search-button img {
+        height: 34px;
+        width: 34px;
+    }
+
+    img {
+        width: 25px;
+        height: 25px;
+        margin-right: 15px;
+    }
+}
+
+.cart-button {
+    position: relative;
+}
+
+#open-account-actions img {
+    width: 25px;
+    height: 25px;
+
+}
+
+.cart-button img {
+    width: 30px;
+    height: 30px;
+}
+
+.admin-panel img {
+    width: 27px;
+    height: 27px;
+}
+
+.menu-button {
+    cursor: pointer;
+
+    @media only screen and (min-width: 1000px) {
+        display: none;
+    }
+}
+
+.mobile-search-button {
+    cursor: pointer;
+
+    @media only screen and (min-width: 600px) {
+        display: none;
+    }
+}

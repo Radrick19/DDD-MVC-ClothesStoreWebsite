@@ -1,0 +1,76 @@
+﻿@using Store.API.ViewModels.Administration;
+@model SubcategoryAddOrUpdateViewModel
+@{
+    ViewData["Title"] = Model.PageTitle;
+    Layout = "~/Views/Shared/_DataManagementLayout.cshtml";
+}
+
+<div class="add-new-wrapper">
+    <h1>@Model.PageHeader</h1>
+
+    @using(Html.BeginForm(Model.ActionName, "category", FormMethod.Post)){
+        @Html.HiddenFor(m => m.Subcategory.Id);
+        @Html.HiddenFor(m => m.PageTitle);
+        @Html.HiddenFor(m => m.PageHeader);
+        @Html.HiddenFor(m => m.ActionName);
+        @Html.HiddenFor(m => m.ButtonName);
+        <div class="add-new-prop">
+            <input type="text" asp-for="Subcategory.DisplayName" placeholder="Название" />
+            <span asp-validation-for="Subcategory.DisplayName"></span>
+        </div>
+        <div class="add-new-prop">
+            <input type="text" asp-for="Subcategory.Name" placeholder="Название для адресной строки" />
+            <span asp-validation-for="Subcategory.Name"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Subcategory.Order"></label>
+            <select asp-for="Subcategory.Order" class="basic-select">
+                @for (int i = 1; i <= 10; i++)
+                {
+                    if (i == @Model.Subcategory.Order)
+                    {
+                        <option value="@i" selected="selected">@i</option>
+                    }
+                    else
+                    {
+                        <option value="@i">@i</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Subcategory.Order"></span>
+        </div>
+        <div class="add-new-prop">
+            <textarea asp-for="Subcategory.Description" placeholder="Описание"></textarea>
+            <span asp-validation-for="Subcategory.Description"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Subcategory.CanReturn"></label>
+            @if(@Model.Subcategory.CanReturn == true)
+            {
+                <input type="checkbox" asp-for="Subcategory.CanReturn" checked />
+            }
+            else{
+                <input type="checkbox" asp-for="Subcategory.CanReturn" />
+            }
+            <span asp-validation-for="Subcategory.CanReturn"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Subcategory.CategoryId"></label>
+            <select asp-for="Subcategory.CategoryId">
+                @foreach (var item in @Model.Categories)
+                {
+                    if (Model.Subcategory.Category != null && item.Id == Model.Subcategory.Category.Id)
+                    {
+                        <option value="@item.Id" selected="selected">@item.DisplayName</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Id">@item.DisplayName</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Subcategory.CategoryId"></span>
+        </div>
+        <input type="submit" class="submit-button" value="@Model.ButtonName" />
+    }
+</div>

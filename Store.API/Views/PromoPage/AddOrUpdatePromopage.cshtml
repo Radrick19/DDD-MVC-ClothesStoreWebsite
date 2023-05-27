@@ -1,0 +1,61 @@
+﻿@using Store.API.ViewModels.Administration;
+@model PromoPageAddOrUpdateViewModel
+@{
+    ViewData["Title"] = Model.PageTitle;
+    Layout = "~/Views/Shared/_DataManagementLayout.cshtml";
+}
+<div class="add-new-wrapper">
+    <h1>@Model.PageHeader</h1>
+    @using (Html.BeginForm(Model.ActionName, "promopage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(m => m.PromoPage.Id);
+        @Html.HiddenFor(m => m.PageTitle);
+        @Html.HiddenFor(m => m.PageHeader);
+        @Html.HiddenFor(m => m.ActionName);
+        @Html.HiddenFor(m => m.ButtonName);
+        @Html.HiddenFor(m => m.PromoPage.PictureLink);
+        <div class="add-new-prop">
+            <input type="text" asp-for="PromoPage.Title" placeholder="Название" />
+            <span asp-validation-for="PromoPage.Title"></span>
+        </div>
+        <div class="add-new-prop">
+            <label>Порядок отображения </label>
+            <select asp-for="PromoPage.Order">
+                @for (int i = 1; i <= 10; i++)
+                {
+                    if (@Model.PromoPage.Order == i)
+                    {
+                        <option value="@i" selected="selected">@i</option>
+                    }
+                    else
+                    {
+                        <option value="@i">@i</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="PromoPage.Order"></span>
+        </div>
+        <div class="add-new-prop">
+            <textarea asp-for="PromoPage.Description" placeholder="Описание"></textarea>
+            <span asp-validation-for="PromoPage.Description"></span>
+        </div>
+        <div class="add-new-prop">
+            <input asp-for="PromoPage.PromoLink" placeholder="Ссылка на промо" />
+            <span asp-validation-for="PromoPage.PromoLink"></span>
+        </div>
+        <div class="add-new-prop">
+            @if (Model.PromoPage.PictureLink != null)
+            {
+                <div class="selected-images-row">
+                    @{string link = "/" + Model.PromoPage.PictureLink;}
+                    <img src="@link">
+                </div>
+            }
+            <label>Изображение для промо</label>
+            <input type="file" accept="image/png,image/jpeg,image/jpg,image/webp" asp-for="Image" />
+            <span asp-validation-for="Image"></span>
+        </div>
+        <input type="submit" class="submit-button" value="@Model.ButtonName" />
+    }
+</div>
+

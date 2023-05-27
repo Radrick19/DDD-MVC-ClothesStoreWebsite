@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "~/Views/Shared/_DataManagementLayout.cshtml";
+}
+<div class="manage-top-bar">
+    <h1>Товары</h1>
+    <ul class="categories-select">
+        <li><a onclick="ChangeCategory(this,1)">Женщины</a></li>
+        <li><a onclick="ChangeCategory(this,2)">Мужчины</a></li>
+        <li><a onclick="ChangeCategory(this,3)">Дети</a></li>
+        <li><a onclick="ChangeCategory(this,4)">Младенцы</a></li>
+    </ul>
+    <a asp-action="add" asp-controller="products">Создать новый</a>
+</div>
+<div class="pagination-line">
+</div>
+<div class="manage-wrapper">
+</div>
+<script src="/scripts/productsmanagement/getproducts.js" asp-append-version="true">
+</script>
+
+

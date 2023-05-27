@@ -1,0 +1,20 @@
+﻿@if(Model != 0){
+<b>@Model</b>
+    int modelRemains = Model % 10;
+    @if (Model == 11)
+    {
+        <p>вещей</p>
+    }
+    else if (modelRemains == 1)
+    {
+        <p>вещь</p>
+    }
+    else if (modelRemains >= 2 && modelRemains <= 4)
+    {
+        <p>вещи</p>
+    }
+    else
+    {
+        <p>вещей</p>
+    }
+}

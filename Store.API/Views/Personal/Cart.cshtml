@@ -1,0 +1,73 @@
+﻿@using Store.API.Models.Personal;
+@model List<CartItem>;
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="bag-wrapper">
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="bag-summary-content">
+                <div class="bag-content">
+                    <div class="mybag">
+                        <div class="bag-title">
+                            @if (Model != null && Model.Count != 0)
+                            {
+                                <h3>Моя корзина</h3>
+                                int modelRemains = Model.Count % 10;
+                                @if (Model.Count == 11)
+                                {
+                                    <small>@Model.Count() вещей</small>
+                                }
+                                else if (modelRemains == 1)
+                                {
+                                    <small>@Model.Count() вещь</small>
+                                }
+                                else if (modelRemains >= 2 && modelRemains <= 4)
+                                {
+                                    <small>@Model.Count() вещи</small>
+                                }
+                                else
+                                {
+                                    <small>@Model.Count() вещей</small>
+
+                                }
+                            }
+                            else
+                            {
+                                <h3>Пусто</h3>
+                            }
+                        </div>
+                        <hr />
+                        <ul class="mybag-items">
+                            @if(Model != null)
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <li>
+                                        @await Html.PartialAsync("CartItem", item)
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="summary-content">
+                    <h3>Общий чек</h3>
+                    <div class="total-price">
+                        <p>К оплате</p>
+                        <b> @ViewBag.CartCost ₽  </b>
+                    </div>
+                    <button>ОПЛАТИТЬ</button>
+                    <div class="discount-code">
+                        <p>Добавить скидочный код</p>
+                        <div class="enter-code-bar">
+                            <input />
+                            <button> Применить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

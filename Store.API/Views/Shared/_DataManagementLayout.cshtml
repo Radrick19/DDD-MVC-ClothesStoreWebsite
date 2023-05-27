@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-wrapper">
+    <div class="content">
+        <div class="admin-content"> 
+            <div class="admin-panel-showcontent">
+                <div class="title-and-updatetime">
+                    <h1> Панель управления</h1>
+                    <h4> Дата обновления: @DateTime.Now</h4>
+                </div>
+                <div class="admin-panel-content">
+                    @RenderBody()
+                </div>
+            </div>
+            <div class="admin-panel-navigation">
+                <ul>
+                    <li><a asp-controller="products" asp-action="Index">Товары</a></li>
+                    <li><a asp-controller="category" asp-action="Index">Подкатегории</a></li>
+                    <li><a asp-controller="collection" asp-action="Index">Коллекции</a></li>
+                    <li><a asp-controller="color" asp-action="Index">Цвета</a></li>
+                    <li><a asp-controller="promopage" asp-action="Index">Промо страницы</a></li>
+                    <li><a asp-controller="admin" asp-action="Index">Аккаунты</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

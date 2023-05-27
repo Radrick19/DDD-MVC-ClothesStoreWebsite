@@ -1,0 +1,35 @@
+version: "3.9"
+networks:
+  qlouni-store-dev:
+    driver: bridge
+services:
+  app: 
+    container_name: qlouni-store
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+        - ConnectionStrings__DefaultConnection=Server=postgres_db;Port=5432;Database=qlouni;Username=postgres;Password=259;
+        - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "8080:80"
+    networks:
+      - qlouni-store-dev
+    depends_on:
+      - postgres_db
+  postgres_db:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=259
+      - POSTGRES_DB=qlouni
+    ports:
+      - "5433:5432"
+    restart: always
+    networks:
+      - qlouni-store-dev
+    volumes:
+      - qlouni-data:/var/lib/postgresql/data
+volumes:
+  qlouni-data:

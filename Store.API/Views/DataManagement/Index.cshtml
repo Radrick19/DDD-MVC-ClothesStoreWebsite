@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_DataManagementLayout.cshtml";
+}
+<div class="admin-panel-infoblock">
+    <div class="admin-panel-infoblock-content">
+        <h2>Топ 10 товаров дня</h2>
+        <div class="admin-panel-topsellsline">
+            <a href="#">1) Куртка #43242 - 72 шт</a>
+            <a href="#">2) Куртка #43242 - 72 шт</a>
+            <a href="#">3) Куртка #43242 - 72 шт</a>
+            <a href="#">4) Куртка #43242 - 72 шт</a>
+            <a href="#">5) Куртка #43242 - 72 шт</a>
+            <a href="#">6) Куртка #43242 - 72 шт</a>
+            <a href="#">7) Куртка #43242 - 72 шт</a>
+            <a href="#">8) Куртка #43242 - 72 шт</a>
+            <a href="#">9) Куртка #43242 - 72 шт</a>
+            <a href="#">10) Куртка #43242 - 72 шт</a>
+        </div>
+    </div>
+</div>
+<div class="admin-panel-infoblock">
+    <h2>Коллекции:</h2>
+    <div class="admin-panel-infoblock-content">
+        <div class="admin-panel-infoline">
+            <h3>Women</h3>
+            @foreach (var item in ViewBag.WomenCollections)
+            {
+                <a asp-controller="Catalog" asp-action="ShowByCollections"
+               asp-route-collectionId="@item.Id" asp-route-categoryId="1"> @item.Name </a>
+            }
+        </div>
+        <div class="admin-panel-infoline">
+            <h3>Men</h3>
+            @foreach (var item in ViewBag.MenCollections)
+            {
+                <a asp-controller="Catalog" asp-action="ShowByCollections"
+               asp-route-collectionId="@item.Id" asp-route-categoryId="2"> @item.Name </a>
+            }
+        </div>
+        <div class="admin-panel-infoline">
+            <h3>Kids</h3>
+            @foreach (var item in ViewBag.KidsCollections)
+            {
+                <a asp-controller="Catalog" asp-action="ShowByCollections"
+               asp-route-collectionId="@item.Id" asp-route-categoryId="3"> @item.Name </a>
+            }
+        </div>
+        <div class="admin-panel-infoline">
+            <h3>Baby</h3>
+            @foreach (var item in ViewBag.BabyCollections)
+            {
+                <a asp-controller="Catalog" asp-action="ShowByCollections"
+               asp-route-collectionId="@item.Id" asp-route-categoryId="4"> @item.Name </a>
+            }
+        </div>
+    </div>
+</div>
+<div class="admin-panel-infoblock">
+    <h2>Подкатегории:</h2>
+    <div class="admin-panel-infoblock-content">
+        <div class="admin-panel-infoline">
+            <h3>Women</h3>
+            @foreach (var item in ViewBag.WomenSubcategories)
+            {
+                <a asp-controller="Catalog" asp-action="ShowBySubcategories"
+               asp-route-subcategoryId="@item.Id"> @item.Name </a>
+            }
+        </div>
+        <div class="admin-panel-infoline">
+            <h3>Men</h3>
+            @foreach (var item in ViewBag.MenSubcategories)
+            {
+                <a asp-controller="Catalog" asp-action="ShowBySubcategories"
+               asp-route-subcategoryId="@item.Id"> @item.Name </a>
+            }
+        </div>
+        <div class="admin-panel-infoline">
+            <h3>Kids</h3>
+            @foreach (var item in ViewBag.KidsSubcategories)
+            {
+                <a asp-controller="Catalog" asp-action="ShowBySubcategories"
+               asp-route-subcategoryId="@item.Id"> @item.Name </a>
+            }
+        </div>
+        <div class="admin-panel-infoline">
+            <h3>Baby</h3>
+            @foreach (var item in ViewBag.BabySubcategories)
+            {
+                <a asp-controller="Catalog" asp-action="ShowBySubcategories"
+               asp-route-subcategoryId="@item.Id"> @item.Name </a>
+            }
+        </div>
+    </div>
+</div>
+

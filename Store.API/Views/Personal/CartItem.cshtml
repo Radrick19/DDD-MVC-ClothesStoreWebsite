@@ -1,0 +1,53 @@
+﻿@using Store.API.Models.Personal;
+@model CartItem;
+
+<div class="bag-item">
+        <div class="bag-item-image-holder">
+        <a asp-controller="Catalog" asp-action="Product" asp-route-productArticle="@Model.Article"
+           asp-route-colorName="@Model.Color.Name" asp-route-sizeName="@Model.Size.Name">
+            <img src="/@Model.MainPicture" />
+        </a>
+        </div>
+        <div class="bag-item-right-side">
+            <div class="bag-actions-and-product-info">
+                <div class="bag-product-info">
+                <a asp-controller="Catalog" asp-action="Product" asp-route-productArticle="@Model.Article"
+                   asp-route-colorName="@Model.Color.Name" asp-route-sizeName="@Model.Size.Name">
+                    <h3>@Model.Name.ToUpper()</h3>
+                </a>
+                    <p>Цвет: @Model.Color.Name.ToUpper()</p>
+                    <p>Размер: @Model.Size.Name.ToUpper()</p>
+                    <p>Цена: @Model.Price ₽</p>
+                </div>
+                <div class="bag-product-actions">
+                    <a asp-controller="Personal" asp-action="DeleteItemFromCart" asp-route-article="@Model.Article"
+                       asp-route-colorName="@Model.Color.Name" asp-route-sizeName="@Model.Size.Name">
+                       Убрать
+                   </a>
+                </div>
+            </div>
+            <div class="bag-quantity_and_sumprice">
+                <div class="bag-quantity-selector">
+                    <small>Кол-во: </small>
+                <a asp-controller="Personal" asp-action="ReduceQuantity" asp-route-article="@Model.Article"
+                       asp-route-colorName="@Model.Color.Name" asp-route-sizeName="@Model.Size.Name" class="remove-symbol">
+                        <img src="/images/icons/minus.png" />
+                    </a>
+                    <p class="quantity-line">@Model.Quantity</p>
+                <a asp-controller="Personal" asp-action="IncreaseQuantity" asp-route-article="@Model.Article"
+                       asp-route-colorName="@Model.Color.Name" asp-route-sizeName="@Model.Size.Name" class="add-symbol">
+                        <img src="/images/icons/plus.png" />
+                    </a>
+                </div>
+                <div class="bag-sum-price">
+                    <h3>
+                        @{
+                            var totalPrice = Model.Quantity * Model.Price;
+                        }
+                        @totalPrice ₽
+                    </h3>
+                </div>
+            </div>
+        </div>
+</div>
+<hr />

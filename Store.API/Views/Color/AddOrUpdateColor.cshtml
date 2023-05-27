@@ -1,0 +1,43 @@
+﻿@using Store.API.ViewModels.Administration;
+@model ColorAddOrUpdateViewModel
+@{
+    ViewData["Title"] = Model.PageTitle;
+    Layout = "~/Views/Shared/_DataManagementLayout.cshtml";
+}
+<div class="add-new-wrapper">
+    <h1>@Model.PageHeader</h1>
+    @using(Html.BeginForm(Model.ActionName, "color", FormMethod.Post)){
+    @Html.HiddenFor(m => m.Color.Id);
+    @Html.HiddenFor(m => m.PageTitle);
+    @Html.HiddenFor(m => m.PageHeader);
+    @Html.HiddenFor(m => m.ActionName);
+    @Html.HiddenFor(m => m.ButtonName);
+        <div class="add-new-prop">
+            <input type="text" asp-for="Color.Name" placeholder="Название" />
+            <span asp-validation-for="Color.Name"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for ="Color.Order"></label>
+            <select asp-for="Color.Order">
+                @for (int i = 1; i <= 10; i++)
+                {
+                    if(@Model.Color.Order == i)
+                    {
+                        <option value="@i" selected="selected">@i</option>
+                    }
+                    else
+                    {
+                        <option value="@i">@i</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Color.Order"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Color.Hex"></label>
+            <input asp-for="Color.Hex" placeholder="#2f21d1" />
+            <span asp-validation-for="Color.Hex"></span>
+        </div>
+        <input type="submit" class="submit-button" value="@Model.ButtonName" />
+    }
+</div>

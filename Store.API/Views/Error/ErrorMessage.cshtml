@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-wrapper">
+    <div class="content">
+        <div class="error-content">
+            @if (@ViewBag.ErrorMessage == null)
+            {
+                <h1> Error </h1>
+                <p> Возникла непредвиденная ошибка, обратитесь в службу поддержки для решения проблемы </p>
+            }
+            else
+            {
+                <h1> Error </h1>
+                <p> @ViewBag.ErrorMessage </p>
+            }
+        </div>
+    </div>
+</div>
+

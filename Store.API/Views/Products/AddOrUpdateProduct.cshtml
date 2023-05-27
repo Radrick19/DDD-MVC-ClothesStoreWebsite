@@ -1,0 +1,179 @@
+﻿@inject IJsonHelper Json;
+@using Store.API.ViewModels.Administration;
+@model ProductAddOrUpdateViewModel
+@{
+    ViewData["Title"] = Model.PageTitle;
+    Layout = "~/Views/Shared/_DataManagementLayout.cshtml";
+}
+@if(Model.Product.Subcategory != null)
+{
+    <script type="text/javascript">
+        let selectedCategoryId = @Html.Raw(Model.Product.Subcategory.CategoryId);
+        let selectedCategoryName = @Html.Raw(Json.Serialize(Model.Product.Subcategory.Category.DisplayName))
+        let selectedSubcategoryId = @Html.Raw(Model.Product.SubcategoryId);
+        let selectedSubcategoryName = @Html.Raw(Json.Serialize(Model.Product.Subcategory.DisplayName))
+    </script>
+}
+<div class="add-new-wrapper">
+    <h1>@Model.PageHeader</h1>
+    @using (Html.BeginForm(Model.ActionName, "products", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+    @Html.HiddenFor(m => m.Product.Id);
+    @Html.HiddenFor(m => m.Product.Article);
+    @Html.HiddenFor(m => m.Product.Subcategory);
+    @Html.HiddenFor(m => m.PageTitle);
+    @Html.HiddenFor(m => m.PageHeader);
+    @Html.HiddenFor(m => m.ActionName);
+    @Html.HiddenFor(m => m.ButtonName);
+    <input type="hidden" name="Product.MainPicture" value="@Model.Product.MainPicture" />
+        @if(Model.Product.AdditionalPictures != null)
+        {
+            foreach(var item in Model.Product.AdditionalPictures)
+            {
+                <input type="hidden" name="Product.AdditionalPictures" value="@item" />
+            }
+        }
+        <div class="add-new-prop">
+            <input type="text" asp-for="Product.Name" placeholder="Название"/>
+            <span asp-validation-for="Product.Name"></span>
+        </div>
+        <div class="add-new-prop">
+            <label>Категория</label>
+            <select id="categry-form-control"></select>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Product.SubcategoryId"></label>
+            <select asp-for="Product.SubcategoryId" id="subcategory-form-control"> </select>
+            <span asp-validation-for="Product.SubcategoryId"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="SelectedCollectionIds"></label>
+            <select class="multi-select" multiple="multiple" asp-for="SelectedCollectionIds">
+                @foreach (var item in Model.Collections)
+                {
+                    bool foundCollection = false;
+                    if(Model.Product.Collections != null)
+                    {
+                        @foreach (var col in Model.Product.Collections)
+                        {
+                            if (item.Id == col.Collection.Id)
+                            {
+                                <option value="@item.Id" selected="selected">@item.DisplayName</option>
+                                foundCollection = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!foundCollection)
+                    {
+                        <option value="@item.Id">@item.DisplayName</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="SelectedCollectionIds"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="SelectedSizeIds"></label>
+            <select class="multi-select" multiple="multiple" asp-for="SelectedSizeIds">
+                @foreach (var item in Model.Sizes)
+                {
+                    bool foundItem = false;
+                    if(Model.Product.Sizes != null)
+                    {
+                        @foreach (var col in Model.Product.Sizes)
+                        {
+                            if (item.Id == col.Size.Id)
+                            {
+                                <option value="@item.Id" selected="selected">@item.Name</option>
+                                foundItem = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!foundItem)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="SelectedSizeIds"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="SelectedColorIds"></label>
+            <select class="multi-select" multiple="multiple" asp-for="SelectedColorIds">
+                @foreach (var item in Model.Colors)
+                {
+                    bool foundItem = false;
+                    if(Model.Product.Colors != null)
+                    {
+                        @foreach (var col in Model.Product.Colors)
+                        {
+                            if (item.Id == col.Color.Id)
+                            {
+                                <option value="@item.Id" selected="selected">@item.Name</option>
+                                foundItem = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!foundItem)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="SelectedColorIds"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Product.Price"></label>
+            <input type="text" asp-for="Product.Price"/>
+            <span asp-validation-for="Product.Price"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Product.Material"></label>
+            <textarea type="text" asp-for="Product.Material"></textarea>
+            <span asp-validation-for="Product.Material"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Product.CareInstuctions"></label>
+            <textarea type="text" asp-for="Product.CareInstuctions"></textarea>
+            <span asp-validation-for="Product.CareInstuctions"></span>
+        </div>
+        <div class="add-new-prop">
+            <label asp-for="Product.Description"></label>
+            <textarea type="text" asp-for="Product.Description"></textarea>
+            <span asp-validation-for="Product.Description"></span>
+        </div>
+        <div class="add-new-prop">
+                @if (@Model.Product.MainPicture != null)
+                {
+                <div class="selected-images-row">
+                    @{string link = "/" + @Model.Product.MainPicture;
+                    <img src="@link">
+                    }
+                </div>
+                }
+            <label asp-for="MainImage"></label>
+            <input type="file" accept="image/png,image/jpeg,image/jpg,image/webp" asp-for="MainImage" />
+            <span asp-validation-for="MainImage"></span>
+        </div>
+        <div class="add-new-prop">
+                @if(Model.Product.AdditionalPictures != null)
+                {
+                <div class="selected-images-row">
+                    @foreach (var image in Model.Product.AdditionalPictures)
+                    {
+                        string link = "/" + image;
+                        <img src="@link">
+                    }
+                </div>
+                }
+            <label asp-for="AdditionalImages"></label>
+            <input type="file" accept="image/png,image/jpeg,image/jpg,image/webp" asp-for="AdditionalImages" multiple />
+            <span asp-validation-for="AdditionalImages"></span>
+        </div>
+        <input class="submit-button" type="submit" value="@Model.ButtonName" />
+    }
+</div>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="application/javascript" src="/scripts/productsmanagement/productselect.js" charset="utf-8" asp-append-version="true"></script>

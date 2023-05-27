@@ -1,0 +1,46 @@
+﻿@using Store.API.ViewModels.Components;
+@using Store.Domain.Enums;
+@model MainMenuActionsViewModel
+<div class="main-menu-actions">
+    <a class="mobile-search-button">
+        <img src="/images/icons/search.svg" />
+    </a>
+    <div>
+        @if (Model.UserRole == UserRole.Unloged)
+        {
+            <a asp-controller="account" asp-action="login" class="login-button">
+                <img src="/images/icons/login.svg" />
+            </a>
+        }
+        else
+        {
+            <a id="open-account-actions">
+                <img src="/images/icons/user.svg" />
+            </a>
+            <div id="account-actions">
+                <h5>Логин: @Model.Username</h5>
+                <a asp-controller="account" asp-action="logout">Выйти</a>
+            </div>
+        }
+    </div>
+    <a asp-controller="personal" asp-action="cart" class="cart-button">
+        <img src="/images/icons/cart.svg" />
+        @if (Model.ItemsInCart != 0)
+        {
+            <div class="cart-quantity-cycle">
+                <small>
+                    @Model.ItemsInCart
+                </small>
+            </div>
+        }
+    </a>
+    @if (Model.UserRole == UserRole.Moderator || Model.UserRole == UserRole.Administrator)
+    {
+        <a asp-controller="datamanagement" asp-action="index" class="admin-panel">
+            <img src="/images/icons/setting.png" />
+        </a>
+    }
+    <a class="menu-button">
+        <img src="/images/icons/menu.svg" />
+    </a>
+</div>

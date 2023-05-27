@@ -1,0 +1,28 @@
+﻿@using Store.API.ViewModels.Account;
+@model RegistrationViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-wrapper">
+    <div class="content">
+        <div class="form-content">
+            <form method="post" asp-controller="Account" asp-action="Registration">
+                <h1> Регистрация </h1>
+                <div class="login-input-field">
+                    <input asp-for="Login" placeholder="Логин" class="form-input" />
+                    <span asp-validation-for="Login"></span>
+                </div>
+                <div class="login-input-field">
+                    <input asp-for="Email" type="email" placeholder="Почта" class="form-input" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <div class="login-input-field">
+                    <input asp-for="Password" type="text" placeholder="Пароль" class="form-input" />
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <input type="submit" value="Зарегистрироваться"/>
+                <a asp-controller="Account" asp-action="Login">Войти</a>
+            </form>
+        </div>
+    </div>
+</div>

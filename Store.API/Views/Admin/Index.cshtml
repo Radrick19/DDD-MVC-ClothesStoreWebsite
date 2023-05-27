@@ -1,0 +1,32 @@
+﻿@using Store.Domain.Models;
+@model IEnumerable<User>
+@{    
+    Layout = "~/Views/Shared/_DataManagementLayout.cshtml";
+}
+<div class="manage-top-bar">
+    <h1>Модераторы</h1>
+    <a asp-controller="admin" asp-action="add">Создать новый</a>
+</div>
+<div class="manage-wrapper">
+    <table>
+        <tr>
+            <th>Guid</th>
+            <th>Логин</th>
+            <th>Почта</th>
+            <th>Роль</th>
+        </tr>
+        @foreach (var item in @Model)
+        {
+            <tr>
+                <td>@item.Guid</td>
+                <td>@item.Login</td>
+                <td>@item.Email</td>
+                <td>@item.UserRole</td>
+                <td>
+                    <form asp-controller="admin" asp-action="delete" asp-route-id="@item.Id"><input type="submit" value="удалить" class="manage-wrapper-delete-button" /></form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+

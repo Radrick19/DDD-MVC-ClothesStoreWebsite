@@ -1,0 +1,37 @@
+﻿@using Store.Application.Dto.Administration;
+@model IEnumerable<PromoPageDto>
+@{
+    ViewData["Title"] = "ManageCategory";
+    Layout = "~/Views/Shared/_DataManagementLayout.cshtml";
+}
+<div class="manage-top-bar">
+    <h1>Промо страницы</h1>
+    <a asp-controller="promopage" asp-action="add">Создать новый</a>
+</div>
+<div class="manage-wrapper">
+    <table>
+        <tr>
+            <th>Заголовок</th>
+            <th>Описание</th>
+            <th>Ссылка на промо</th>
+            <th>Порядок</th>
+        </tr>
+        @foreach (var item in @Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                @{
+                    string link = "/" + item.PromoLink;
+                }
+                <td><a href="@link">@item.PromoLink</a></td>
+                <td>@item.Order</td>
+                <td><a asp-controller="promopage" asp-action="update" asp-route-id="@item.Id" class="manage-wrapper-edit-button">изменить</a></td>
+                <td>
+                    <form asp-controller="promopage" asp-action="delete" asp-route-id="@item.Id"><input type="submit" value="удалить" class="manage-wrapper-delete-button" /></form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+

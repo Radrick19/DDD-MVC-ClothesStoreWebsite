@@ -1,0 +1,48 @@
+﻿@using Store.API.ViewModels.Components;
+@model DropDownMenuViewModel
+@{
+    string dropDownId;
+    if(Model.Category.Id == 1)
+    {
+        dropDownId = "Women-drop-menu";
+    }
+    else if(Model.Category.Id == 2)
+    {
+        dropDownId = "Men-drop-menu";
+    }
+    else if (Model.Category.Id == 3)
+    {
+        dropDownId = "Kids-drop-menu";
+    }
+    else
+    {
+        dropDownId = "Baby-drop-menu";
+    }
+}
+<div class="drop-main-menu" id="@dropDownId">
+        <div class="content-wrapper">
+            <div class="content">
+                <div class="drop-main-menu-content">
+                    <div class="drop-main-menu-column">
+                        <h3>Коллекции</h3>
+                        <ul>
+                            @foreach (var item in Model.Collections)
+                            {
+
+                            <li> <a href="/catalog/collection/@Model.Category.Name/@item.Name"> @item.DisplayName </a> </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="drop-main-menu-column">
+                        <h3>Категории</h3>
+                        <ul>
+                            @foreach (var item in Model.Subcategories)
+                            {
+                            <li> <a href="/catalog/@Model.Category.Name/@item.Name"> @item.DisplayName </a> </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

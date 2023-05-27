@@ -1,0 +1,33 @@
+﻿@using Store.Application.Dto.Administration;
+@model IEnumerable<CollectionDto>;
+@{
+    ViewData["Title"] = "ManageCollections";
+    Layout = "~/Views/Shared/_DataManagementLayout.cshtml";
+}
+<div class="manage-top-bar">
+    <h1>Коллекции</h1>
+    <a asp-controller="collection" asp-action="add">Создать новый</a>
+</div>
+<div class="manage-wrapper">
+    <table>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Актуальная?</th>
+            <th>Порядок</th>
+        </tr>
+        @foreach (var item in @Model)
+        {
+            <tr>
+                <td>@item.DisplayName</td>
+                <td>@item.Description</td>
+                <td>@item.IsActual</td>
+                <td>@item.Order</td>
+                <td><a asp-controller="collection" asp-action="update" asp-route-id="@item.Id" class="manage-wrapper-edit-button">изменить</a></td>
+                <td>
+                    <form asp-controller="collection" asp-action="delete" asp-route-id="@item.Id"><input type="submit" value="удалить" class="manage-wrapper-delete-button" /></form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
