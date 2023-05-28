@@ -21,7 +21,7 @@ namespace Store.API.Infrastructure
             string pictureUrl = picturesFolder + Guid.NewGuid() + Path.GetExtension(image.FileName);
             using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, pictureUrl), FileMode.Create))
             {
-                await Task.Run(()=> image.CopyTo(fs));
+                await image.CopyToAsync(fs);
             }
             return pictureUrl;
         }
@@ -34,14 +34,14 @@ namespace Store.API.Infrastructure
                 string pictureUrl = picturesFolder + Guid.NewGuid() + Path.GetExtension(image.FileName);
                 using(var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, pictureUrl), FileMode.Create))
                 {
-                    await Task.Run(() => image.CopyTo(fs));
+                    await image.CopyToAsync(fs);
                 }
                 pictureUrls.Add(pictureUrl);
             }
             return pictureUrls;
         }
 
-        public async Task DeleteImages(params string[] links) 
+        public void DeleteImages(params string[] links) 
         {
              foreach (var link in links)
             {
@@ -49,7 +49,7 @@ namespace Store.API.Infrastructure
                 if (File.Exists(imageLink))
                 {
                     FileInfo image = new FileInfo(imageLink);
-                    await Task.Run(()=> image.Delete());
+                    image.Delete();
                 }
             }
         }

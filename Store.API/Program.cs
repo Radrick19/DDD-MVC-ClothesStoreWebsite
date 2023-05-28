@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-//using NLog;
-//using NLog.Web;
+using NLog;
+using NLog.Web;
 using Store.Api.Interfaces;
 using Store.API.Infrastructure;
 using Store.API.Middlewares;
@@ -14,21 +14,21 @@ using Store.Domain.Interfaces;
 using Store.Domain.Models.ManyToManyProductEntities;
 using Store.Domain.Models.ProductEntities;
 
-//var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
-//logger.Debug("init main");
+logger.Debug("init main");
 
-//try
-//{
+try
+{
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddMvc().AddRazorRuntimeCompilation();
 
     builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
-    //builder.Logging.ClearProviders();
-    //builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
-    //builder.Host.UseNLog();
+    builder.Logging.ClearProviders();
+    builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
+    builder.Host.UseNLog();
 
     builder.Services.AddDbContext<StoreContext>(
         options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -96,13 +96,13 @@ using Store.Domain.Models.ProductEntities;
     app.UseStaticFiles();
 
     app.Run();
-//}
-//catch(Exception ex)
-//{
-//    logger.Error(ex, "Program stopped because of exception");
-//    throw;
-//}
-//finally
-//{
-//    NLog.LogManager.Shutdown();
-//}
+}
+catch(Exception ex)
+{
+    logger.Error(ex, "Program stopped because of exception");
+    throw;
+}
+finally
+{
+    LogManager.Shutdown();
+}

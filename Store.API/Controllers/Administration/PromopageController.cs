@@ -140,7 +140,7 @@ namespace Store.API.Controllers.Administration
         public async Task<IActionResult> Delete(int id)
         {
             PromoPage promoPage = await _promoPageRepository.GetAsync(id);
-            await _picturesControl.DeleteImages(promoPage.PictureLink);
+            _picturesControl.DeleteImages(promoPage.PictureLink);
             await _promoPageRepository.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
             return RedirectToAction("Index", "promopage");

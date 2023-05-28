@@ -7,6 +7,6 @@ namespace Store.Application.Interfaces
     {
         Task<string> UploadImage(IFormFile image, string picturesFolder);
         Task<List<string>> UploadImage(IEnumerable<IFormFile> images, string picturesFolder);
-        Task DeleteImages(params string[] links);
+        void DeleteImages(params string[] links);
     }
 }

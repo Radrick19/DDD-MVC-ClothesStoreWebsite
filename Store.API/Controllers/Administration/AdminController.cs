@@ -48,10 +48,12 @@ namespace Store.API.Controllers.Administration
             }
             if (ModelState.IsValid)
             {
-                byte[] hash;
+                string hash;
+                string salt = DateTime.Now.GetHashCode().ToString();
                 using (var shaAlg = Sha3.Sha3256())
                 {
-                    hash = shaAlg.ComputeHash(Encoding.UTF8.GetBytes(viewModel.Password));
+                    string inputPassHash = Convert.ToBase64String(shaAlg.ComputeHash(Encoding.UTF8.GetBytes(viewModel.Password)));
+                    hash = Convert.ToBase64String(shaAlg.ComputeHash(Encoding.UTF8.GetBytes(inputPassHash + salt)));
                 }
                 var user = new User
                 {
@@ -59,6 +61,7 @@ namespace Store.API.Controllers.Administration
                     Email = viewModel.Email,
                     Password = hash,
                     Guid = Guid.NewGuid(),
+                    Salt = salt,
                     UserRole = viewModel.Role
                 };
                 await _userRepository.AddAsync(user);

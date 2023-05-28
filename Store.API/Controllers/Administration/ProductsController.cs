@@ -260,11 +260,11 @@ namespace Store.API.Controllers.Administration
                     var deleteItem = await _productRepository.GetAsync(productViewModel.Product.Id);
                     if (newMainImageUploaded)
                     {
-                        await _picturesControl.DeleteImages(deleteItem.MainPicture);
+                        _picturesControl.DeleteImages(deleteItem.MainPicture);
                     }
                     if (newAdditionalImageUploaded)
                     {
-                        await _picturesControl.DeleteImages(deleteItem.AdditionalPictures);
+                        _picturesControl.DeleteImages(deleteItem.AdditionalPictures);
                     }
                     await _productRepository.DeleteAsync(productViewModel.Product.Id);
                     await _unitOfWork.SaveChangesAsync();
@@ -290,8 +290,8 @@ namespace Store.API.Controllers.Administration
         public async Task<IActionResult> Delete(int id)
         {
             Product product = await _productRepository.GetAsync(id);
-            await _picturesControl.DeleteImages(product.MainPicture);
-            await _picturesControl.DeleteImages(product.AdditionalPictures);
+            _picturesControl.DeleteImages(product.MainPicture);
+            _picturesControl.DeleteImages(product.AdditionalPictures);
             _productRepository.Delete(product);
             await _unitOfWork.SaveChangesAsync();
             return RedirectToAction("index", "products");

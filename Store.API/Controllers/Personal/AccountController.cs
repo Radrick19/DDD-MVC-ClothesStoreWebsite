@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using SHA3.Net;
@@ -45,10 +46,12 @@ namespace Store.API.Controllers.Personal
             }
             if (ModelState.IsValid)
             {
-                byte[] hash;
+                string hash;
+                string salt = DateTime.Now.GetHashCode().ToString();
                 using (var shaAlg = Sha3.Sha3256())
                 {
-                    hash = shaAlg.ComputeHash(Encoding.UTF8.GetBytes(viewModel.Password));
+                    string inputPassHash = Convert.ToBase64String(shaAlg.ComputeHash(Encoding.UTF8.GetBytes(viewModel.Password)));
+                    hash = Convert.ToBase64String(shaAlg.ComputeHash(Encoding.UTF8.GetBytes(inputPassHash + salt)));
                 }
                 var user = new User
                 {
@@ -56,6 +59,7 @@ namespace Store.API.Controllers.Personal
                     Email = viewModel.Email,
                     Password = hash,
                     Guid = Guid.NewGuid(),
+                    Salt = salt,
                     UserRole = UserRole.Customer
                 };
                 await _userRepository.AddAsync(user);
@@ -95,12 +99,13 @@ namespace Store.API.Controllers.Personal
             else
             {
                 var user = await _userRepository.FirstOrDefaultAsync(user => user.Login == viewModel.LoginOrEmail || user.Email == viewModel.LoginOrEmail);
-                byte[] hash;
+                string inputHash;
                 using (var shaAlg = Sha3.Sha3256())
                 {
-                    hash = shaAlg.ComputeHash(Encoding.UTF8.GetBytes(viewModel.Password));
+                    string inputPassHash = Convert.ToBase64String(shaAlg.ComputeHash(Encoding.UTF8.GetBytes(viewModel.Password)));
+                    inputHash = Convert.ToBase64String(shaAlg.ComputeHash(Encoding.UTF8.GetBytes(inputPassHash + user.Salt)));
                 }
-                if (user.Password.SequenceEqual(hash))
+                if (inputHash.Equals(user.Password))
                 {
                     var claims = new List<Claim>
                     {
