@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Store.Domain;
@@ -11,9 +12,11 @@ using Store.Domain;
 namespace Store.Domain.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class EfCoreContexModelSnapshot : ModelSnapshot
+    [Migration("20230528183329_addIsEmailConfirmedFieldToUser")]
+    partial class addIsEmailConfirmedFieldToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,27 +327,6 @@ namespace Store.Domain.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Store.Domain.Models.UserEmailConfirmationHash", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConfirmationHash")
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserConfirmationHashes");
-                });
-
             modelBuilder.Entity("Store.Domain.Models.ManyToManyProductEntities.CollectionProduct", b =>
                 {
                     b.HasOne("Store.Domain.Models.ProductEntities.ClothingCollection", "Collection")
@@ -422,17 +404,6 @@ namespace Store.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Store.Domain.Models.UserEmailConfirmationHash", b =>
-                {
-                    b.HasOne("Store.Domain.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Store.Domain.Models.ProductEntities.ClothingCollection", b =>

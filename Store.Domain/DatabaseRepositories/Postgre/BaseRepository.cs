@@ -51,7 +51,7 @@ namespace Store.Domain.DatabaseRepositories.Postgre
             dbSet.Update(entity);
         }
 
-        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> expression)
+        public virtual async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> expression)
         {
             return await dbSet.FirstOrDefaultAsync(expression);
         }

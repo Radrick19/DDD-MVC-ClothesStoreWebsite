@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.MVC", "Store.API\Store.MVC.csproj", "{AEF8BBDD-0E1A-4FA7-A2B0-96AA8ADF6489}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Mvc", "Store.API\Store.Mvc.csproj", "{AEF8BBDD-0E1A-4FA7-A2B0-96AA8ADF6489}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Application", "Store.Application\Store.Application.csproj", "{27B3835D-ADB5-4BAF-BB84-0EDDCCED308C}"
 EndProject

@@ -8,6 +8,7 @@ using Store.API.ViewModels.Account;
 using Store.Domain.Enums;
 using Store.Domain.Interfaces;
 using Store.Domain.Models;
+using Store.MVC.Interfaces;
 using System.Drawing.Printing;
 using System.Security.Claims;
 using System.Text;
@@ -19,12 +20,14 @@ namespace Store.API.Controllers.Personal
         private readonly IRepository<User> _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _context;
+        private readonly IEmailService _emailService;
 
-        public AccountController(IRepository<User> userRepository, IUnitOfWork unitOfWork, IHttpContextAccessor context)
+        public AccountController(IRepository<User> userRepository, IUnitOfWork unitOfWork, IHttpContextAccessor context, IEmailService emailService)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _context = context;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -60,11 +63,13 @@ namespace Store.API.Controllers.Personal
                     Password = hash,
                     Guid = Guid.NewGuid(),
                     Salt = salt,
-                    UserRole = UserRole.Customer
+                    UserRole = UserRole.Customer,
+                    IsEmailConfirmed = false
                 };
                 await _userRepository.AddAsync(user);
                 await _unitOfWork.SaveChangesAsync();
-                return RedirectToAction("Login");
+                await _emailService.SendEmailConfirmAsync(viewModel.Email, user);
+                return Ok("На вашу почту отправлено сообщение для подтверждения аккаунта");
             }
             return View(viewModel);
         }
@@ -99,6 +104,10 @@ namespace Store.API.Controllers.Personal
             else
             {
                 var user = await _userRepository.FirstOrDefaultAsync(user => user.Login == viewModel.LoginOrEmail || user.Email == viewModel.LoginOrEmail);
+                if(!user.IsEmailConfirmed)
+                {
+                    ModelState.AddModelError("", "Подтвердите аккаунт с помощью сообщения на почте");
+                }
                 string inputHash;
                 using (var shaAlg = Sha3.Sha3256())
                 {

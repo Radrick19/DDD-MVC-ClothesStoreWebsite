@@ -21,6 +21,7 @@ namespace Store.Domain
         public DbSet<ColorProduct> ColorsProducts { get; set; }
         public DbSet<ProductSize> ProductsSizes { get; set; }
         public DbSet<PromoPage> PromoPages { get; set; }
+        public DbSet<UserEmailConfirmationHash> UserConfirmationHashes { get; set; }
         public DbSet<User> Users { get; set; }
 
 

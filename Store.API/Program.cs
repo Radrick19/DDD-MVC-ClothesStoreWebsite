@@ -11,8 +11,11 @@ using Store.Domain;
 using Store.Domain.DatabaseRepositories.Postgre;
 using Store.Domain.Infrastructure;
 using Store.Domain.Interfaces;
+using Store.Domain.Models;
 using Store.Domain.Models.ManyToManyProductEntities;
 using Store.Domain.Models.ProductEntities;
+using Store.Mvc.Infrastructure;
+using Store.MVC.Interfaces;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
@@ -59,6 +62,10 @@ try
     builder.Services.AddTransient<IRepository<CollectionProduct>, CollectionProductRepository>();
 
     builder.Services.AddTransient<IRepository<Subcategory>, SubcategoryRepository>();
+
+    builder.Services.AddTransient<IRepository<UserEmailConfirmationHash>, UserEmailConfirmationHashRepository>();
+
+    builder.Services.AddTransient<IEmailService, EmailService>();
 
     builder.Services.AddTransient<ICartService, CartService>();
 
