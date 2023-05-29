@@ -3,10 +3,12 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script src="https://www.google.com/recaptcha/api.js?render=6LeotkwmAAAAAIcVu7Tuy28yopTPHw0iJ0wl6bD1"></script>
 <div class="content-wrapper">
     <div class="content">
         <div class="form-content">
             <form method="post" asp-controller="Account" asp-action="Login">
+                <input type="hidden" asp-for="captchaToken" id="captchaToken" />
                 <h1> Авторизация </h1>
                 <div class="validation" asp-validation-summary="ModelOnly"></div>
                 @Html.HiddenFor(m=> m.ReturnUrl)
@@ -24,4 +26,12 @@
         </div>
     </div>
 </div>
+<script>
+    grecaptcha.ready(function () {
+        window.grecaptcha.execute('6LeotkwmAAAAAIcVu7Tuy28yopTPHw0iJ0wl6bD1', { action: 'login' }).then(function (token) {
+            document.getElementById('captchaToken').value = token;
+        });
+    });
+</script>
+
 

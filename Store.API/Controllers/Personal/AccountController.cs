@@ -95,7 +95,11 @@ namespace Store.API.Controllers.Personal
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel viewModel)
         {
-            if(!ModelState.IsValid)
+            if (!await _captchaValidator.ValidateAsync(viewModel.captchaToken))
+            {
+                ModelState.AddModelError("", "Ошибка. Пройдите капчу");
+            }
+            if (!ModelState.IsValid)
             {
                 return View(viewModel);
             }
