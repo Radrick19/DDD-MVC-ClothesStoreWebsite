@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using SHA3.Net;
 using Store.API.ViewModels.Account;
+using Store.Application.Interfaces;
 using Store.Domain.Enums;
 using Store.Domain.Interfaces;
 using Store.Domain.Models;
@@ -21,13 +22,16 @@ namespace Store.API.Controllers.Personal
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _context;
         private readonly IEmailService _emailService;
+        private readonly ICaptchaValidator _captchaValidator;
 
-        public AccountController(IRepository<User> userRepository, IUnitOfWork unitOfWork, IHttpContextAccessor context, IEmailService emailService)
+        public AccountController(IRepository<User> userRepository, IUnitOfWork unitOfWork, IHttpContextAccessor context,
+            IEmailService emailService, ICaptchaValidator captchaValidator)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _context = context;
             _emailService = emailService;
+            _captchaValidator = captchaValidator;
         }
 
         [HttpGet]
@@ -39,6 +43,11 @@ namespace Store.API.Controllers.Personal
         [HttpPost]
         public async Task<IActionResult> Registration(RegistrationViewModel viewModel)
         {
+            if(!await _captchaValidator.ValidateAsync(viewModel.captchaToken))
+            {
+                ModelState.AddModelError("", "Ошибка. Пройдите капчу");
+                return View(viewModel);
+            }
             if(_userRepository.GetQuary().Any(user=> user.Login == viewModel.Login)) 
             {
                 ModelState.AddModelError("Login", "Данный логин уже занят");
@@ -69,7 +78,7 @@ namespace Store.API.Controllers.Personal
                 await _userRepository.AddAsync(user);
                 await _unitOfWork.SaveChangesAsync();
                 await _emailService.SendEmailConfirmAsync(viewModel.Email, user);
-                return Ok("На вашу почту отправлено сообщение для подтверждения аккаунта");
+                return RedirectToAction("Index", "Message", new { text = "Сообщение с подтверждением отправлено вам на почту" });
             }
             return View(viewModel);
         }

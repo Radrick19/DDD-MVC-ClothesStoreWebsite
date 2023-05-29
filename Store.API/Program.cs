@@ -69,9 +69,13 @@ try
 
     builder.Services.AddTransient<ICartService, CartService>();
 
+    builder.Services.AddScoped<ICaptchaValidator, CaptchaValidator>();
+
     builder.Services.AddTransient<IProductPopularityService, ProductPopularityService>();
 
     builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+
+    builder.Services.AddHttpClient<CaptchaValidator>();
 
     #endregion
 

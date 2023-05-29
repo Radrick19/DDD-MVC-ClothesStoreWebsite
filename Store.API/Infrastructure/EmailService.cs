@@ -36,9 +36,11 @@ namespace Store.Mvc.Infrastructure
             var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress("Администрация сайта Клоуны", "radrick.andrey@yandex.ru"));
             emailMessage.To.Add(new MailboxAddress("", email));
+            emailMessage.Subject = "Qlouni. Подтверждение почты";
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
-                Text = $"<a href=\"{link}\"> Подтверждение письма </a>",
+                Text = $"Нажимите <a href=\"{link}\"> подтвердить </a> для подтверждения почты. Если вы не проходили регистрацию, просто " +
+                $"проигнорируйте это сообщение",
             };
             using(var client = new SmtpClient())
             {

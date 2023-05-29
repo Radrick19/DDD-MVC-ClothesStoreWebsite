@@ -29,7 +29,7 @@ namespace Store.Mvc.Controllers.Infrastructure
                 _userRepository.Update(user);
                 _userEmailConfirmHashRepository.Delete(userAndEmailHash);
                 await _unitOfWork.SaveChangesAsync();
-                return Ok("Аккаунт подтверждён");
+                return RedirectToAction("Index", "Message", new { text = "Аккаунт успешно подтверждён" });
             }
             return BadRequest();
         }
