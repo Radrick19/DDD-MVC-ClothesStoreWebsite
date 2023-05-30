@@ -38,11 +38,11 @@ namespace Store.API.Controllers.Administration
         [HttpPost]
         public async Task<IActionResult> Add(RegistrationViewModel viewModel, UserRole role)
         {
-            if (_userRepository.GetQuary().Any(user => user.Login == viewModel.Login))
+            if (_userRepository.GetQuary().Any(user => user.Login.ToLower() == viewModel.Login.ToLower()))
             {
                 ModelState.AddModelError("Login", "Данный логин уже занят");
             }
-            if (_userRepository.GetQuary().Any(user => user.Email == viewModel.Email))
+            if (_userRepository.GetQuary().Any(user => user.Email.ToLower() == viewModel.Email.ToLower()))
             {
                 ModelState.AddModelError("Email", "Данный email уже занят");
             }
@@ -62,7 +62,9 @@ namespace Store.API.Controllers.Administration
                     Password = hash,
                     Guid = Guid.NewGuid(),
                     Salt = salt,
-                    UserRole = viewModel.Role
+                    UserRole = viewModel.Role,
+                    IsEmailConfirmed = true,
+                    RegistrationDate = DateTime.UtcNow
                 };
                 await _userRepository.AddAsync(user);
                 await _unitOfWork.SaveChangesAsync();

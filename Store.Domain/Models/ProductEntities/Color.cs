@@ -14,6 +14,14 @@ namespace Store.Domain.Models.ProductEntities
 
         public virtual ICollection<ColorProduct> Products { get; set; }
 
+        public Color(int id, string name, string hex, int order)
+        {
+            Id = id;
+            Name = name;
+            Hex = hex;
+            Order = order;
+        }
+
         protected Color()
         {
             

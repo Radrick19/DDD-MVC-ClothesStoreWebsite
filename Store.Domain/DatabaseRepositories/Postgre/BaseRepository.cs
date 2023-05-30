@@ -55,5 +55,10 @@ namespace Store.Domain.DatabaseRepositories.Postgre
         {
             return await dbSet.FirstOrDefaultAsync(expression);
         }
+
+        public virtual T FirstOrDefault(Expression<Func<T, bool>> expression)
+        {
+            return dbSet.FirstOrDefault(expression);
+        }
     }
 }

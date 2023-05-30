@@ -45,14 +45,14 @@ namespace Store.API.Controllers.Personal
         {
             if(!await _captchaValidator.ValidateAsync(viewModel.captchaToken))
             {
-                ModelState.AddModelError("", "Ошибка. Пройдите капчу");
+                ModelState.AddModelError("", "Капча не пройдена");
                 return View(viewModel);
             }
-            if(_userRepository.GetQuary().Any(user=> user.Login == viewModel.Login)) 
+            if(_userRepository.GetQuary().Any(user=> user.Login.ToLower() == viewModel.Login.ToLower())) 
             {
                 ModelState.AddModelError("Login", "Данный логин уже занят");
             }
-            if (_userRepository.GetQuary().Any(user => user.Email == viewModel.Email))
+            if (_userRepository.GetQuary().Any(user => user.Email.ToLower() == viewModel.Email.ToLower()))
             {
                 ModelState.AddModelError("Email", "Данный email уже занят");
             }
@@ -73,7 +73,8 @@ namespace Store.API.Controllers.Personal
                     Guid = Guid.NewGuid(),
                     Salt = salt,
                     UserRole = UserRole.Customer,
-                    IsEmailConfirmed = false
+                    IsEmailConfirmed = false,
+                    RegistrationDate = DateTime.UtcNow, 
                 };
                 await _userRepository.AddAsync(user);
                 await _unitOfWork.SaveChangesAsync();
@@ -104,10 +105,10 @@ namespace Store.API.Controllers.Personal
                 return View(viewModel);
             }
             User person;
-            person = await _userRepository.FirstOrDefaultAsync(user => user.Login == viewModel.LoginOrEmail);
+            person = await _userRepository.FirstOrDefaultAsync(user => user.Login.ToLower() == viewModel.LoginOrEmail.ToLower());
             if(person == null)
             {
-                person = await _userRepository.FirstOrDefaultAsync(user => user.Email == viewModel.LoginOrEmail);
+                person = await _userRepository.FirstOrDefaultAsync(user => user.Email.ToLower() == viewModel.LoginOrEmail.ToLower());
             }
             if(person == null)
             {
@@ -116,7 +117,7 @@ namespace Store.API.Controllers.Personal
             }
             else
             {
-                var user = await _userRepository.FirstOrDefaultAsync(user => user.Login == viewModel.LoginOrEmail || user.Email == viewModel.LoginOrEmail);
+                var user = await _userRepository.FirstOrDefaultAsync(user => user.Login.ToLower() == viewModel.LoginOrEmail.ToLower() || user.Email.ToLower() == viewModel.LoginOrEmail.ToLower());
                 if(!user.IsEmailConfirmed)
                 {
                     ModelState.AddModelError("", "Подтвердите аккаунт с помощью сообщения на почте");

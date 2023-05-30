@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Options;
+using Store.Application.Infrastructure.Extensions;
 using Store.Domain.Enums;
 using Store.Domain.Models;
 using Store.Domain.Models.ManyToManyProductEntities;
@@ -27,6 +28,8 @@ namespace Store.Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Seed();
+
             modelBuilder
                 .Entity<Product>()
                 .HasIndex(prod => prod.Article)

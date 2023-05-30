@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Store.Domain;
@@ -11,9 +12,11 @@ using Store.Domain;
 namespace Store.Domain.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class EfCoreContexModelSnapshot : ModelSnapshot
+    [Migration("20230530113820_addSeedData")]
+    partial class addSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,6 +193,22 @@ namespace Store.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Colors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Hex = "#f3f3f3",
+                            Name = "Белый",
+                            Order = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Hex = "#18181a",
+                            Name = "Чёрный",
+                            Order = 2
+                        });
                 });
 
             modelBuilder.Entity("Store.Domain.Models.ProductEntities.Product", b =>
@@ -349,6 +368,48 @@ namespace Store.Domain.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Subcategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CanReturn = true,
+                            CategoryId = 1,
+                            Description = "В погоне за идеальной парой джинсов? Наш ассортимент женских джинсов охватывает каждую подгонку, порез и стиль для всех видов гардероба, от наших джинсов с высокой талией до расслабленных джинсов с широкими ногами. Откройте для себя наши совершенно новые изогнутые джинсы для совершенно новой модной",
+                            DisplayName = "Джинсы",
+                            Name = "jeans",
+                            Order = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CanReturn = true,
+                            CategoryId = 2,
+                            Description = "Джинсы: этот проверенный временем, в течение всего сезона. Примите сознательно случайный образ с нашей коллекцией мужских джинсов с подходящими для каждого стиля, настроения и ансамбля. Мы обновили наши вечные джинсы с обычной подгонкой для совершенно нового сезона с тонкой конусочкой",
+                            DisplayName = "Джинсы",
+                            Name = "jeans",
+                            Order = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CanReturn = true,
+                            CategoryId = 3,
+                            Description = "UT Архив переиздает тщательно отобранные дизайны из прошлых коллекций. Самые популярные дизайны за последние 20 лет были отобраны для этой переизданной коллекции от художников Энди Уорхола, Жана-Мишеля Баскиата и Кейта Харинга.",
+                            DisplayName = "UT футболки с принтами",
+                            Name = "ut-shirts",
+                            Order = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CanReturn = false,
+                            CategoryId = 4,
+                            Description = "Убедитесь, что ваш малыш остается уютным днем и ночью с восхитительным ассортиментом Oniqlo One Piece Sleepings и BodySuits. Благословные, стеганые и микрофлиальные выборы подготовлены к детской уютной, в то время как дизайны с легким изменением с помощью молнии и кнопок с цветами, снимая стресс",
+                            DisplayName = "Боди",
+                            Name = "bodysuit",
+                            Order = 1
+                        });
                 });
 
             modelBuilder.Entity("Store.Domain.Models.PromoPage", b =>
@@ -415,20 +476,6 @@ namespace Store.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "Admin@admin.com",
-                            Guid = new Guid("ab331490-b84f-47d9-9276-8a821944b1fe"),
-                            IsEmailConfirmed = true,
-                            Login = "admin",
-                            Password = "ZlkHh6U5OhuqN08dKpvcVl+6ab+qJ400+QMu/T48+Og=",
-                            RegistrationDate = new DateTime(2023, 5, 30, 11, 56, 22, 261, DateTimeKind.Utc).AddTicks(7689),
-                            Salt = "6028927",
-                            UserRole = "Administrator"
-                        });
                 });
 
             modelBuilder.Entity("Store.Domain.Models.UserEmailConfirmationHash", b =>

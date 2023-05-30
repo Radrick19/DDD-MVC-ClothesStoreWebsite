@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-        - ConnectionStrings__DefaultConnection=Server=postgres_db;Port=5432;Database=qlouni;Username=postgres;Password=259;
+        - ConnectionStrings__DefaultConnection=Server=postgres_db;Port=5433;Database=qlouni;Username=postgres;Password=259;
         - ASPNETCORE_URLS=http://+:80
     ports:
       - "8080:80"

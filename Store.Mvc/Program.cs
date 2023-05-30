@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Web;
@@ -45,6 +47,9 @@ try
 
     builder.Services.AddAuthorization();
 
+    builder.Services.AddHangfire(h => h.UsePostgreSqlStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+    builder.Services.AddHangfireServer();
+
     #region DIServices
 
     builder.Services.AddScoped<StoreContext>();
@@ -71,6 +76,8 @@ try
 
     builder.Services.AddScoped<ICaptchaValidator, CaptchaValidator>();
 
+    builder.Services.AddScoped<IApplicationCleaner, ApplicationCleaner>();
+
     builder.Services.AddTransient<IProductPopularityService, ProductPopularityService>();
 
     builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
@@ -94,6 +101,8 @@ try
         endponints.MapControllerRoute("Default", "{controller=home}/{action=index}/{id?}");
     });
 
+    app.UseHangfireDashboard("/dashboard");
+
     if (app.Environment.IsDevelopment())
     {
         app.UseDeveloperExceptionPage();
@@ -106,7 +115,18 @@ try
 
     app.UseStaticFiles();
 
+    #region StartTasks
+
+    RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnactiveConfirmHashes(), Cron.Daily);
+    RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnactivatedUsers(), Cron.Daily);
+    RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnusedMainProductPictures(), Cron.Daily);
+    RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnusedAdditionalProductPictures(), Cron.Daily);
+    RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnusedPromoBgPictures(), Cron.Daily);
+
+    #endregion
+
     app.Run();
+
 }
 catch(Exception ex)
 {

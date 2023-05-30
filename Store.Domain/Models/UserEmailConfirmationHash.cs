@@ -15,5 +15,7 @@ namespace Store.Domain.Models
         public virtual User User { get; set; }
 
         public virtual string ConfirmationHash { get; set; }
+
+        public virtual DateTime CreationDate { get; set; }
     }
 }

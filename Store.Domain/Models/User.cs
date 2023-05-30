@@ -11,5 +11,6 @@ namespace Store.Domain.Models
         public virtual string Salt { get; set; }
         public virtual bool IsEmailConfirmed { get; set; }
         public virtual UserRole UserRole { get; set; }
+        public virtual DateTime RegistrationDate { get; set; }
     }
 }

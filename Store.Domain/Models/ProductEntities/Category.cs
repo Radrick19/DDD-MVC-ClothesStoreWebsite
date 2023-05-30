@@ -10,6 +10,15 @@
 
         public virtual int Order { get; set; }
 
+        public Category(int id, string name, string displayName, string description, int order)
+        {
+            Id = id;
+            Name = name;
+            DisplayName = displayName;
+            Description = description;
+            Order = order;
+        }
+
         protected Category()
         {
             

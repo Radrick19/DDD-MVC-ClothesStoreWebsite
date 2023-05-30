@@ -1,8 +1,10 @@
 ﻿using Castle.Core.Smtp;
+using Hangfire;
 using MailKit.Net.Smtp;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using MimeKit;
 using SHA3.Net;
+using Store.Application.Interfaces;
 using Store.Domain.Interfaces;
 using Store.Domain.Models;
 using Store.MVC.Interfaces;
@@ -15,11 +17,13 @@ namespace Store.Mvc.Infrastructure
     {
         private readonly IRepository<UserEmailConfirmationHash> _userEmailConfirmationHashRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IApplicationCleaner _applicationCleaner;
 
-        public EmailService(IRepository<UserEmailConfirmationHash> userEmailConfirmationHashRepository, IUnitOfWork unitOfWork)
+        public EmailService(IRepository<UserEmailConfirmationHash> userEmailConfirmationHashRepository, IUnitOfWork unitOfWork, IApplicationCleaner applicationCleaner)
         {
             _userEmailConfirmationHashRepository = userEmailConfirmationHashRepository;
             _unitOfWork = unitOfWork;
+            _applicationCleaner = applicationCleaner;
         }
 
         public async Task SendEmailConfirmAsync(string email, User user)
@@ -29,7 +33,7 @@ namespace Store.Mvc.Infrastructure
             {
                 confirmHash = Convert.ToBase64String(shaAlg.ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString()))).Replace("/", "");
             }
-            await _userEmailConfirmationHashRepository.AddAsync(new UserEmailConfirmationHash { User = user, ConfirmationHash = confirmHash });
+            await _userEmailConfirmationHashRepository.AddAsync(new UserEmailConfirmationHash { User = user, ConfirmationHash = confirmHash, CreationDate = DateTime.UtcNow });
             await _unitOfWork.SaveChangesAsync();
 
             string link = $"http://localhost:5110/emailconfirm/{confirmHash}";
@@ -49,6 +53,7 @@ namespace Store.Mvc.Infrastructure
                 await client.SendAsync(emailMessage);
                 await client.DisconnectAsync(true);
             }
+            BackgroundJob.Schedule(()=> _applicationCleaner.DeleteUnactivatedUser(user.Id), TimeSpan.FromMinutes(10));
         }
     }
 }

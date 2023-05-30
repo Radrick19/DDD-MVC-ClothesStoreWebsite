@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Store.Domain;
@@ -11,9 +12,11 @@ using Store.Domain;
 namespace Store.Domain.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class EfCoreContexModelSnapshot : ModelSnapshot
+    [Migration("20230529160411_addCreationTimeFieldToUserAndUserAndConfifrmHashes")]
+    partial class addCreationTimeFieldToUserAndUserAndConfifrmHashes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,40 +109,6 @@ namespace Store.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Мы знаем, что хороший гардероб всегда должен развиваться в стремлении к лучшему. Мы знаем, что даже самые простые предметы всегда способны быть улучшенными. И мы знаем, что наша преданность инновациям жизни означает, что сосредоточиться на том, что будет дальше, является ключом к прогрессу.",
-                            DisplayName = "Женщины",
-                            Name = "women",
-                            Order = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Мы знаем, что хороший гардероб всегда должен развиваться в стремлении к лучшему. Мы знаем, что даже самые простые предметы всегда способны быть улучшенными.",
-                            DisplayName = "Мужчины",
-                            Name = "men",
-                            Order = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Мы понимаем, что по мере того, как маленькие растут, меняются и развиваются, вы должны убедиться, что их гардероб делает то же самое, чтобы не отставать. Исследуйте самые последние дополнения к диапазонам Qlouni для детей и детей",
-                            DisplayName = "Дети",
-                            Name = "kids",
-                            Order = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Магазин Нового прибытия онлайн. Показывая последние коллекции и релизы от Qlouni",
-                            DisplayName = "Младенцы",
-                            Name = "baby",
-                            Order = 4
-                        });
                 });
 
             modelBuilder.Entity("Store.Domain.Models.ProductEntities.ClothingCollection", b =>
@@ -260,62 +229,6 @@ namespace Store.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sizes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Xxxs",
-                            Order = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Xxs",
-                            Order = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Xs",
-                            Order = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "S",
-                            Order = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "M",
-                            Order = 5
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "L",
-                            Order = 6
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Xl",
-                            Order = 7
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Xxl",
-                            Order = 8
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Xxxl",
-                            Order = 9
-                        });
                 });
 
             modelBuilder.Entity("Store.Domain.Models.ProductEntities.Subcategory", b =>
@@ -415,20 +328,6 @@ namespace Store.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "Admin@admin.com",
-                            Guid = new Guid("ab331490-b84f-47d9-9276-8a821944b1fe"),
-                            IsEmailConfirmed = true,
-                            Login = "admin",
-                            Password = "ZlkHh6U5OhuqN08dKpvcVl+6ab+qJ400+QMu/T48+Og=",
-                            RegistrationDate = new DateTime(2023, 5, 30, 11, 56, 22, 261, DateTimeKind.Utc).AddTicks(7689),
-                            Salt = "6028927",
-                            UserRole = "Administrator"
-                        });
                 });
 
             modelBuilder.Entity("Store.Domain.Models.UserEmailConfirmationHash", b =>

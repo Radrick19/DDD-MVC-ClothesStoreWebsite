@@ -25,5 +25,16 @@ namespace Store.Domain.Models.ProductEntities
         {
             
         }
+
+        public Subcategory(int id, int categoryId, string name, string displayName, string description, bool canReturn, int order)
+        {
+            Id = id;
+            CategoryId = categoryId;
+            Name = name;
+            DisplayName = displayName;
+            Description = description;
+            CanReturn = canReturn;
+            Order = order;
+        }
     }
 }

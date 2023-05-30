@@ -31,5 +31,10 @@ namespace Store.Domain.DatabaseRepositories.Postgre
         {
             return await dbSet.Include(ue => ue.User).FirstOrDefaultAsync(expression);
         }
+
+        public override UserEmailConfirmationHash FirstOrDefault(Expression<Func<UserEmailConfirmationHash, bool>> expression)
+        {
+            return dbSet.FirstOrDefault(expression);
+        }
     }
 }
