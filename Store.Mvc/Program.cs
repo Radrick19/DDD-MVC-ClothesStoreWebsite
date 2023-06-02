@@ -50,6 +50,7 @@ try
     builder.Services.AddHangfire(h => h.UsePostgreSqlStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
     builder.Services.AddHangfireServer();
 
+
     #region DIServices
 
     builder.Services.AddScoped<StoreContext>();
@@ -59,6 +60,8 @@ try
     builder.Services.AddScoped<IArticleGenerator, ArticleGenerator>();
 
     builder.Services.AddScoped<IPicturesControl, PicturesControl>();
+
+    builder.Services.AddScoped<IApplicationCleaner, ApplicationCleaner>();
 
     builder.Services.AddTransient(typeof(IRepository<>), typeof(BaseRepository<>));
 
@@ -75,8 +78,6 @@ try
     builder.Services.AddTransient<ICartService, CartService>();
 
     builder.Services.AddScoped<ICaptchaValidator, CaptchaValidator>();
-
-    builder.Services.AddScoped<IApplicationCleaner, ApplicationCleaner>();
 
     builder.Services.AddTransient<IProductPopularityService, ProductPopularityService>();
 
@@ -101,7 +102,6 @@ try
         endponints.MapControllerRoute("Default", "{controller=home}/{action=index}/{id?}");
     });
 
-    app.UseHangfireDashboard("/dashboard");
 
     if (app.Environment.IsDevelopment())
     {
@@ -113,15 +113,12 @@ try
         app.UseExceptionHandler("/Error/ErrorMessage");
     }
 
+    app.UseHangfireDashboard("/dashboard");
+
     app.UseStaticFiles();
 
     #region StartTasks
 
-    RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnactiveConfirmHashes(), Cron.Daily);
-    RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnactivatedUsers(), Cron.Daily);
-    RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnusedMainProductPictures(), Cron.Daily);
-    RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnusedAdditionalProductPictures(), Cron.Daily);
-    RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnusedPromoBgPictures(), Cron.Daily);
 
     #endregion
 

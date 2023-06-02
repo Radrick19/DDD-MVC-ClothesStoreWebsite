@@ -152,9 +152,12 @@ namespace Store.API.Controllers.Administration
             }
             if (ProductValidation(productViewModel))
             {
-                foreach (var collectionId in productViewModel.SelectedCollectionIds)
+                if(productViewModel.SelectedCollectionIds != null)
                 {
-                    productViewModel.Product.Collections.Add(new CollectionProduct(_mapper.Map<Product>(productViewModel.Product), collectionId));
+                    foreach (var collectionId in productViewModel.SelectedCollectionIds)
+                    {
+                        productViewModel.Product.Collections.Add(new CollectionProduct(_mapper.Map<Product>(productViewModel.Product), collectionId));
+                    }
                 }
                 foreach (var colorId in productViewModel.SelectedColorIds)
                 {
@@ -241,9 +244,12 @@ namespace Store.API.Controllers.Administration
                 try
                 {
                     await _unitOfWork.BeginTransaction();
-                    foreach (var collectionId in productViewModel.SelectedCollectionIds)
+                    if (productViewModel.SelectedCollectionIds != null)
                     {
-                        productViewModel.Product.Collections.Add(new CollectionProduct(_mapper.Map<Product>(productViewModel.Product), collectionId));
+                        foreach (var collectionId in productViewModel.SelectedCollectionIds)
+                        {
+                            productViewModel.Product.Collections.Add(new CollectionProduct(_mapper.Map<Product>(productViewModel.Product), collectionId));
+                        }
                     }
                     foreach (var colorId in productViewModel.SelectedColorIds)
                     {
@@ -252,10 +258,6 @@ namespace Store.API.Controllers.Administration
                     foreach (var sizeId in productViewModel.SelectedSizeIds)
                     {
                         productViewModel.Product.Sizes.Add(new ProductSize(_mapper.Map<Product>(productViewModel.Product), sizeId));
-                    }
-                    if(productViewModel.Product.CreationTime == default(DateTime))
-                    {
-                        productViewModel.Product.CreationTime = DateTime.UtcNow;
                     }
                     var deleteItem = await _productRepository.GetAsync(productViewModel.Product.Id);
                     if (newMainImageUploaded)

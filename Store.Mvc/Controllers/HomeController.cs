@@ -7,11 +7,13 @@ namespace Store.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IRepository<PromoPage> _promoPageRepository;
 
-        public HomeController(IRepository<PromoPage> promoPageRepository)
+        public HomeController(IRepository<PromoPage> promoPageRepository, IWebHostEnvironment webHostEnvironment)
         {
             _promoPageRepository = promoPageRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]

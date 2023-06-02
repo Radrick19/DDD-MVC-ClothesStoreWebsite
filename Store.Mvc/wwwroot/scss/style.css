@@ -1277,6 +1277,9 @@ footer .links-row a:last-child:after {
   font-size: 14px;
   width: 100%;
 }
+.add-new-prop .big-text-area {
+  min-height: 150px;
+}
 .add-new-prop label {
   margin-right: 10px;
 }
@@ -1298,7 +1301,6 @@ footer .links-row a:last-child:after {
   width: 100%;
   max-width: 100%;
   min-width: 100%;
-  min-height: 200px;
 }
 .add-new-wrapper input {
   padding: 10px;

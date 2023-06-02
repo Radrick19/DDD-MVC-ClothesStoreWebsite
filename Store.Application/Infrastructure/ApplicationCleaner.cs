@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Store.Application.Interfaces;
 using Store.Domain.Interfaces;
@@ -30,6 +31,12 @@ namespace Store.Application.Infrastructure
             _webHostEnvironment = webHostEnvironment;
             _productRepository = productRepository;
             _promoPageRepository = promoPageRepository;
+
+            RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnactiveConfirmHashes(), Cron.Daily);
+            RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnactivatedUsers(), Cron.Daily);
+            RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnusedMainProductPictures(), Cron.Daily);
+            RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnusedAdditionalProductPictures(), Cron.Daily);
+            RecurringJob.AddOrUpdate<IApplicationCleaner>(service => service.DeleteUnusedPromoBgPictures(), Cron.Daily);
         }
 
         public async Task DeleteUnactivatedUsers()

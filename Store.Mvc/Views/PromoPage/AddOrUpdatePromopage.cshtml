@@ -47,8 +47,7 @@
             @if (Model.PromoPage.PictureLink != null)
             {
                 <div class="selected-images-row">
-                    @{string link = "/" + Model.PromoPage.PictureLink;}
-                    <img src="@link">
+                    <img src="/@Model.PromoPage.PictureLink">
                 </div>
             }
             <label>Изображение для промо</label>

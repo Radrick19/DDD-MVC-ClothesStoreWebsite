@@ -114,12 +114,13 @@ namespace Store.Domain
         public StoreContext(DbContextOptions<StoreContext> options)
             : base(options)
         {
-
+            Database.Migrate();
         }
 
         public StoreContext()
         {
-            Database.EnsureCreated();
+            Database.Migrate();
+            //Database.EnsureCreated();
         }
     }
 }

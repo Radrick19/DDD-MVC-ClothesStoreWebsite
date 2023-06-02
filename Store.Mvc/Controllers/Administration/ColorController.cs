@@ -63,9 +63,14 @@ namespace Store.API.Controllers.Administration
                 if (_colorRepository.GetQuary().Any(col => col.Name.ToLower() == colorViewModel.Color.Name.ToLower()))
                 {
                     ModelState.AddModelError("Color.Name", "Цвет с таким названием уже существует");
+                    return View("AddOrUpdateColor", colorViewModel);
                 }
                 else
                 {
+                    if (colorViewModel.Color.Hex[0] != '#')
+                    {
+                        colorViewModel.Color.Hex = "#" + colorViewModel.Color.Hex;
+                    }
                     await _colorRepository.AddAsync(_mapper.Map<Color>(colorViewModel.Color));
                     await _unitOfWork.SaveChangesAsync();
                     return RedirectToAction("Index", "color");
@@ -99,9 +104,14 @@ namespace Store.API.Controllers.Administration
                 if (_colorRepository.GetQuary().Any(col => col.Name.ToLower() == colorViewModel.Color.Name.ToLower() && col.Id != colorViewModel.Color.Id))
                 {
                     ModelState.AddModelError("Color.Name", "Цвет с таким названием уже существует");
+                    return View("AddOrUpdateColor", colorViewModel);
                 }
                 else
                 {
+                    if (colorViewModel.Color.Hex[0] != '#')
+                    {
+                        colorViewModel.Color.Hex = "#" + colorViewModel.Color.Hex;
+                    }
                     _colorRepository.Update(_mapper.Map<Color>(colorViewModel.Color));
                     await _unitOfWork.SaveChangesAsync();
                     return RedirectToAction("Index", "color");

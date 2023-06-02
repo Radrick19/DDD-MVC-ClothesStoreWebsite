@@ -18,7 +18,7 @@ services:
     depends_on:
       - postgres_db
     volumes:
-      - qlouni-images:/app/wwwroot/images
+      - qlouni-images:/root/images
   postgres_db:
     container_name: postgres
     image: postgres:latest
@@ -29,10 +29,7 @@ services:
     ports:
       - "5433:5432"
     restart: always
-    volumes:
-      - pg-data:/var/lib/postgresql/data
     networks:
       - qlouni-store-dev
 volumes:
   qlouni-images:  
-  pg-data:  

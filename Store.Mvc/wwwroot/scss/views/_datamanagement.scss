@@ -166,6 +166,10 @@
     font-size: 14px;
     width: 100%;
 
+    .big-text-area {
+        min-height: 150px;
+    }
+
     label {
         margin-right: 10px;
     }
@@ -189,7 +193,6 @@
         width: 100%;
         max-width: 100%;
         min-width: 100%;
-        min-height: 200px;
     }
 
     input {

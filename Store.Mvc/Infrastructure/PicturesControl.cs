@@ -8,8 +8,8 @@ using System.Collections.Generic;
 namespace Store.API.Infrastructure
 {
     public class PicturesControl : IPicturesControl
-    {
-        private readonly IWebHostEnvironment _webHostEnvironment;
+    { 
+        IWebHostEnvironment _webHostEnvironment;
 
         public PicturesControl(IWebHostEnvironment webHostEnvironment)
         {
@@ -18,32 +18,34 @@ namespace Store.API.Infrastructure
 
         public async Task<string> UploadImage(IFormFile image, string picturesFolder)
         {
-            string pictureUrl = picturesFolder + Guid.NewGuid() + Path.GetExtension(image.FileName);
-            using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, pictureUrl), FileMode.Create))
+            string picturePath = picturesFolder + Guid.NewGuid() + Path.GetExtension(image.FileName);
+            string pathToSave = Path.Combine(_webHostEnvironment.WebRootPath, picturePath);
+            using (var fs = new FileStream(pathToSave, FileMode.Create))
             {
                 await image.CopyToAsync(fs);
             }
-            return pictureUrl;
+            return picturePath;
         }
 
         public async Task<List<string>> UploadImage(IEnumerable<IFormFile> images, string picturesFolder)
         {
-            List<string> pictureUrls = new List<string>();
+            List<string> picturePathes = new List<string>();
             foreach (var image in images)
             {
-                string pictureUrl = picturesFolder + Guid.NewGuid() + Path.GetExtension(image.FileName);
-                using(var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, pictureUrl), FileMode.Create))
+                string picturePath = picturesFolder + Guid.NewGuid() + Path.GetExtension(image.FileName);
+                picturePathes.Add(picturePath);
+                string pathToSave = Path.Combine(_webHostEnvironment.WebRootPath, picturePath);
+                using (var fs = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, picturePath), FileMode.Create))
                 {
                     await image.CopyToAsync(fs);
                 }
-                pictureUrls.Add(pictureUrl);
             }
-            return pictureUrls;
+            return picturePathes;
         }
 
-        public void DeleteImages(params string[] links) 
+        public void DeleteImages(params string[] links)
         {
-             foreach (var link in links)
+            foreach (var link in links)
             {
                 string imageLink = Path.Combine(_webHostEnvironment.WebRootPath, link);
                 if (File.Exists(imageLink))

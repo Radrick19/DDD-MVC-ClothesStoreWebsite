@@ -85,7 +85,7 @@ namespace Store.API.Controllers.Personal
             };
             string serializedCartItems = JsonSerializer.Serialize(cartItems);
             Response.Cookies.Append(cartCookieKey, serializedCartItems, cookieOptions);
-            return RedirectToAction("OpenCart");
+            return RedirectToAction("Cart");
         }
 
         public IActionResult IncreaseQuantity(string article, string colorName, string sizeName)
