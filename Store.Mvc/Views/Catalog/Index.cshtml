@@ -2,6 +2,18 @@
 @using Store.Application.Enums;
 @model ShowCatalogViewModel
 @{
+    if (!string.IsNullOrWhiteSpace(Model.SectionName))
+    {
+        ViewData["Title"] = Model.SectionName;
+    }
+    else if (string.IsNullOrWhiteSpace(Model.SearchText))
+    {
+        ViewData["Title"] = Model.SearchText;
+    }
+    else
+    {
+        ViewData["Title"] = "Каталог";
+    }
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="nav-line">

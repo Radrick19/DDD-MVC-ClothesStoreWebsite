@@ -7,7 +7,7 @@ using Store.API.ViewModels.Catalog;
 using Store.Application.Dto.Administration;
 using Store.Application.Dto.Product;
 using Store.Application.Enums;
-using Store.Application.Interfaces;
+using Store.Application.Services.ProductPopularityService;
 using Store.Domain.Infrastructure;
 using Store.Domain.Interfaces;
 using Store.Domain.Models.ProductEntities;
@@ -18,8 +18,7 @@ namespace Store.Controllers
 {
     public class CatalogController : Controller
     {
-        private const int _pageSize = 8;
-
+        private readonly int _pageSize;
         private readonly IRepository<Product> _productsRepository;
         private readonly IRepository<ClothingCollection> _collectionRepository;
         private readonly IRepository<Subcategory> _subcategoryRepository;
@@ -28,9 +27,10 @@ namespace Store.Controllers
         private readonly IRepository<Size> _sizesRepository;
         private readonly IMapper _mapper;
         private readonly IProductPopularityService _popularityService;
+        private readonly IConfiguration _configuration;
 
-        public CatalogController(IUnitOfWork unitOfWork,IRepository<Product> productsRepository, IRepository<ClothingCollection> collectionRepository, IRepository<Subcategory> subcategoryRepository, 
-            IRepository<Category> categoryRepository, IRepository<Color> colorRepository, IRepository<Size> sizesRepository, IMapper mapper, IProductPopularityService popularityService)
+        public CatalogController(IUnitOfWork unitOfWork, IRepository<Product> productsRepository, IRepository<ClothingCollection> collectionRepository, IRepository<Subcategory> subcategoryRepository,
+            IRepository<Category> categoryRepository, IRepository<Color> colorRepository, IRepository<Size> sizesRepository, IMapper mapper, IProductPopularityService popularityService, IConfiguration configuration)
         {
             _productsRepository = productsRepository;
             _collectionRepository = collectionRepository;
@@ -40,6 +40,8 @@ namespace Store.Controllers
             _sizesRepository = sizesRepository;
             _mapper = mapper;
             _popularityService = popularityService;
+            _configuration = configuration;
+            _pageSize = Convert.ToInt32(_configuration.GetSection("CatalogSettings")["ItemsPerPage"]);
         }
 
         [HttpGet("catalog/paginationline/{categoryId:int}/{subcategoryId:int}/{collectionId:int}/{searchText}/{totalPage:int}")]
@@ -185,7 +187,7 @@ namespace Store.Controllers
             return View(detailsCatalogViewModoel);
         }
 
-        [HttpGet("catalog/product/{productArticle}/{colorName}/{sizeName}")]
+        [HttpGet("catalog/product/{productArticle}/{colorName}/{sizeName?}")]
         public async Task<IActionResult> Product(string productArticle, string colorName, string sizeName = null)
         {
             Product product = await (_productsRepository as IProductRepository).GetByArticleAsync(productArticle);
@@ -247,7 +249,7 @@ namespace Store.Controllers
             }
             else if(sortType == SortTypeEnum.novelty)
             {
-                query = query.OrderBy(prod => prod.CreationTime);
+                query = query.OrderByDescending(prod => prod.CreationTime);
             }
             else if(sortType == SortTypeEnum.priceIncrease)
             {

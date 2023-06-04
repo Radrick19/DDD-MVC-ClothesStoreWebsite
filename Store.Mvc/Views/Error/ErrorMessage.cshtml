@@ -7,13 +7,11 @@
         <div class="error-content">
             @if (@ViewBag.ErrorMessage == null)
             {
-                <h1> Error </h1>
                 <p> Возникла непредвиденная ошибка, обратитесь в службу поддержки для решения проблемы </p>
             }
             else
             {
-                <h1> Error </h1>
-                <p> @ViewBag.ErrorMessage </p>
+                <h1> Ошибка @ViewBag.ErrorMessage</h1>
             }
         </div>
     </div>

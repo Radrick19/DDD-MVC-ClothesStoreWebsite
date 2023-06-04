@@ -154,7 +154,7 @@
                 </div>
                 }
             <label asp-for="MainImage"></label>
-            <input type="file" accept="image/png,image/jpeg,image/jpg,image/webp" asp-for="MainImage" />
+            <input type="file" accept="image/*" asp-for="MainImage" />
             <span asp-validation-for="MainImage"></span>
         </div>
         <div class="add-new-prop">
@@ -169,7 +169,7 @@
                 </div>
                 }
             <label asp-for="AdditionalImages"></label>
-            <input type="file" accept="image/png,image/jpeg,image/jpg,image/webp" asp-for="AdditionalImages" multiple />
+            <input type="file" accept="image*" asp-for="AdditionalImages" multiple />
             <span asp-validation-for="AdditionalImages"></span>
         </div>
         <input class="submit-button" type="submit" value="@Model.ButtonName" />

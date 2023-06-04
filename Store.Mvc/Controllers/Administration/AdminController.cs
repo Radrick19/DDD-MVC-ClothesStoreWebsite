@@ -6,6 +6,7 @@ using Store.API.ViewModels.Account;
 using Store.Domain.Enums;
 using Store.Domain.Interfaces;
 using Store.Domain.Models;
+using Store.Mvc.ViewModels.Administration;
 using System.Data;
 using System.Text;
 
@@ -36,7 +37,7 @@ namespace Store.API.Controllers.Administration
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(RegistrationViewModel viewModel, UserRole role)
+        public async Task<IActionResult> Add(AddAccountViewModel viewModel)
         {
             if (_userRepository.GetQuary().Any(user => user.Login.ToLower() == viewModel.Login.ToLower()))
             {

@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Store.Api.Interfaces;
-using Store.API.Infrastructure;
 using Store.API.ViewModels.Components;
 using Store.Domain.Enums;
+using Store.Mvc.Services.CartService;
 using System;
 using System.Security.Claims;
 

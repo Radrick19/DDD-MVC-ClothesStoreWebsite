@@ -19,6 +19,7 @@ services:
       - postgres_db
     volumes:
       - qlouni-images:/app/wwwroot/images
+      - qlouni-logs:/app/logs/
   postgres_db:
     container_name: postgres
     image: postgres:latest
@@ -34,5 +35,6 @@ services:
     networks:
       - qlouni-store-dev
 volumes:
-  qlouni-images:  
+  qlouni-images: 
+  qlouni-logs:
   pg-data:  

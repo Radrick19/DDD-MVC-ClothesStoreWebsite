@@ -6,12 +6,13 @@ using Store.API.ViewModels.Administration;
 using Store.API.ViewModels.Catalog;
 using Store.Application.Dto.Administration;
 using Store.Application.Dto.Product;
-using Store.Application.Interfaces;
+using Store.Application.Services.ArticleGeneratorSertvice;
 using Store.Domain.Interfaces;
 using Store.Domain.Models.ManyToManyProductEntities;
 using Store.Domain.Models.ProductEntities;
+using Store.Mvc.Services.PicturesControlService;
+using Store.Mvc.Services.PicturesControlService.Enums;
 using System.Data;
-using System.Runtime.CompilerServices;
 
 namespace Store.API.Controllers.Administration
 {
@@ -19,19 +20,19 @@ namespace Store.API.Controllers.Administration
     public class ProductsController : Controller
     {
         private const int _pageSize = 10;
-
-        private readonly IPicturesControl _picturesControl;
+        private readonly IPicturesControlService _picturesControl;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Product> _productRepository;
         private readonly IRepository<Size> _sizesRepository;
         private readonly IRepository<Color> _colorsRepository;
         private readonly IRepository<ClothingCollection> _collectionRepository;
-        private readonly IArticleGenerator _articleGenerator;
+        private readonly IArticleGeneratorService _articleGenerator;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public ProductsController(IPicturesControl picturesControl, IUnitOfWork unitOfWork, IRepository<Product> productRepository,
+        public ProductsController(IPicturesControlService picturesControl, IUnitOfWork unitOfWork, IRepository<Product> productRepository,
             IRepository<Size> sizesRepository, IRepository<Color> colorsRepository, IRepository<ClothingCollection> collectionRepository,
-            IArticleGenerator articleGenerator, IMapper mapper)
+            IArticleGeneratorService articleGenerator, IMapper mapper, ILogger<ProductsController> logger)
         {
             _picturesControl = picturesControl;
             _unitOfWork = unitOfWork;
@@ -41,6 +42,7 @@ namespace Store.API.Controllers.Administration
             _collectionRepository = collectionRepository;
             _articleGenerator = articleGenerator;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -117,42 +119,44 @@ namespace Store.API.Controllers.Administration
         [HttpPost]
         public async Task<IActionResult> Add(ProductAddOrUpdateViewModel productViewModel)
         {
-            if (productViewModel.MainImage == null && string.IsNullOrEmpty(productViewModel.Product.MainPicture))
+            try
             {
-                ModelState.AddModelError("MainImage", "Необходимо добавить главное фото");
-            }
-            else if(productViewModel.MainImage != null)
-            {
-                try
+                if (productViewModel.MainImage == null && string.IsNullOrEmpty(productViewModel.Product.MainPicture))
                 {
-                    productViewModel.Product.MainPicture = await _picturesControl.UploadImage(productViewModel.MainImage, "images/main/");
+                    ModelState.AddModelError("MainImage", "Необходимо добавить главное фото");
                 }
-                catch
+                else if (productViewModel.MainImage != null)
                 {
-                    ModelState.AddModelError("MainImage", "Ошибка при загрузке фото");
-                    productViewModel.MainImage = null;
+                    productViewModel.Product.MainPicture = await _picturesControl.UploadImage(productViewModel.MainImage, PicturesType.MainProduct);
                 }
             }
-            if (productViewModel.AdditionalImages == null && productViewModel.Product.AdditionalPictures == null)
+            catch(Exception ex)
             {
-                ModelState.AddModelError("AdditionalImages", "Необходимо добавить дополнительные фото");
+                _logger.LogError($"Error main image uploading while adding: FileType - {productViewModel.MainImage.ContentType}, FileName - {productViewModel.MainImage.Name}, Error - {ex.Message}");
+                ModelState.AddModelError("MainImage", "Ошибка при загрузке фото");
+                productViewModel.MainImage = null;
             }
-            else if (productViewModel.AdditionalImages != null)
+            try
             {
-                try
+                if (productViewModel.AdditionalImages == null && productViewModel.Product.AdditionalPictures == null)
                 {
-                    var imageLinks = await _picturesControl.UploadImage(productViewModel.AdditionalImages, "images/additional/");
+                    ModelState.AddModelError("AdditionalImages", "Необходимо добавить дополнительные фото");
+                }
+                else if (productViewModel.AdditionalImages != null)
+                {
+                    var imageLinks = await _picturesControl.UploadImage(productViewModel.AdditionalImages, PicturesType.AdditionalProduct);
                     productViewModel.Product.AdditionalPictures = imageLinks.ToArray();
                 }
-                catch
-                {
-                    ModelState.AddModelError("MainImage", "Ошибка при загрузке фото");
-                    productViewModel.AdditionalImages = null;
-                }
             }
-            if (ProductValidation(productViewModel))
+            catch(Exception ex)
             {
-                if(productViewModel.SelectedCollectionIds != null)
+                _logger.LogError($"Error additional images uploading while adding: FileType - {productViewModel.AdditionalImages.First().ContentType}, FileNames - {productViewModel.AdditionalImages.Select(image => image.Name + " ")}, Error - {ex.Message}");
+                ModelState.AddModelError("MainImage", "Ошибка при загрузке фото");
+                productViewModel.AdditionalImages = null;
+            }
+            if (ModelState.IsValid && ProductValidation(productViewModel))
+            {
+                if (productViewModel.SelectedCollectionIds != null)
                 {
                     foreach (var collectionId in productViewModel.SelectedCollectionIds)
                     {
@@ -202,44 +206,45 @@ namespace Store.API.Controllers.Administration
         {
             bool newMainImageUploaded = false;
             bool newAdditionalImageUploaded = false;
-
-            if (productViewModel.MainImage == null && string.IsNullOrEmpty(productViewModel.Product.MainPicture))
+            try
             {
-                ModelState.AddModelError("MainImage", "Необходимо добавить главное фото");
-            }
-            else if (productViewModel.MainImage != null)
-            {
-
-                try
+                if (productViewModel.MainImage == null && string.IsNullOrEmpty(productViewModel.Product.MainPicture))
                 {
-                    productViewModel.Product.MainPicture = await _picturesControl.UploadImage(productViewModel.MainImage, "images/main/");
+                    ModelState.AddModelError("MainImage", "Необходимо добавить главное фото");
+                }
+                else if (productViewModel.MainImage != null)
+                {
+                    productViewModel.Product.MainPicture = await _picturesControl.UploadImage(productViewModel.MainImage, PicturesType.MainProduct);
                     newMainImageUploaded = true;
                 }
-                catch
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Error main image uploading while updating: FileType - {productViewModel.MainImage.ContentType}, FileName - {productViewModel.MainImage.Name}, Error - {ex.Message}");
+                ModelState.AddModelError("MainImage", "Ошибка при загрузке фото");
+                productViewModel.MainImage = null;
+            }
+            try
+            {
+                if (productViewModel.AdditionalImages == null && productViewModel.Product.AdditionalPictures == null)
                 {
-                    ModelState.AddModelError("MainImage", "Ошибка при загрузке фото");
-                    productViewModel.MainImage = null;
+                    ModelState.AddModelError("AdditionalImages", "Необходимо добавить дополнительные фото");
                 }
-            }
-            if (productViewModel.AdditionalImages == null && productViewModel.Product.AdditionalPictures == null)
-            {
-                ModelState.AddModelError("AdditionalImages", "Необходимо добавить дополнительные фото");
-            }
-            else if(productViewModel.AdditionalImages != null)
-            {
-                try
+                else if (productViewModel.AdditionalImages != null)
                 {
-                    var link = await _picturesControl.UploadImage(productViewModel.AdditionalImages, "images/additional/");
+                    var link = await _picturesControl.UploadImage(productViewModel.AdditionalImages, PicturesType.AdditionalProduct);
                     productViewModel.Product.AdditionalPictures = link.ToArray();
                     newAdditionalImageUploaded = true;
                 }
-                catch
-                {
-                    ModelState.AddModelError("MainImage", "Ошибка при загрузке фото");
-                    productViewModel.AdditionalImages = null;
-                }
             }
-            if (ProductValidation(productViewModel))
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error additional images uploading while updating: FileType - {productViewModel.AdditionalImages.First().ContentType}, FileNames - {productViewModel.AdditionalImages.Select(image=> image.Name + " ")}, Error - {ex.Message}");
+                ModelState.AddModelError("MainImage", "Ошибка при загрузке фото");
+                productViewModel.AdditionalImages = null;
+            }
+
+            if (ModelState.IsValid && ProductValidation(productViewModel))
             {
                 try
                 {
@@ -260,6 +265,7 @@ namespace Store.API.Controllers.Administration
                         productViewModel.Product.Sizes.Add(new ProductSize(_mapper.Map<Product>(productViewModel.Product), sizeId));
                     }
                     var deleteItem = await _productRepository.GetAsync(productViewModel.Product.Id);
+                    productViewModel.Product.CreationTime = deleteItem.CreationTime;
                     if (newMainImageUploaded)
                     {
                         _picturesControl.DeleteImages(deleteItem.MainPicture);
@@ -273,13 +279,14 @@ namespace Store.API.Controllers.Administration
                     await _productRepository.AddAsync(_mapper.Map<Product>(productViewModel.Product));
                     await _unitOfWork.SaveChangesAsync();
                     await _unitOfWork.CommitTransaction();
+                    return RedirectToAction("Index", "products");
                 }
-                catch
+                catch(Exception ex)
                 {
+                    _logger.LogError("Failed to save product in db, error:" + ex.Message);
                     await _unitOfWork.RollbackTransaction();
+                    ModelState.AddModelError("MainImage", "Ошибка при загрузке товара");
                 }
-
-                return RedirectToAction("Index", "products");
             }
             productViewModel.Collections = await _collectionRepository.GetQuary().OrderBy(collection => collection.Order).Select(col => _mapper.Map<CollectionDto>(col)).ToListAsync();
             productViewModel.Sizes = await _sizesRepository.GetQuary().OrderBy(size => size.Order).Select(size => _mapper.Map<SizeDto>(size)).ToListAsync();
@@ -291,12 +298,20 @@ namespace Store.API.Controllers.Administration
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            Product product = await _productRepository.GetAsync(id);
-            _picturesControl.DeleteImages(product.MainPicture);
-            _picturesControl.DeleteImages(product.AdditionalPictures);
-            _productRepository.Delete(product);
-            await _unitOfWork.SaveChangesAsync();
-            return RedirectToAction("index", "products");
+            try
+            {
+                Product product = await _productRepository.GetAsync(id);
+                _picturesControl.DeleteImages(product.MainPicture);
+                _picturesControl.DeleteImages(product.AdditionalPictures);
+                _productRepository.Delete(product);
+                await _unitOfWork.SaveChangesAsync();
+                return RedirectToAction("index", "products");
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Couldn't delete current images of product (id = {id}) , exception: {ex.Message}");
+                return RedirectToAction("index", "products");
+            }
         }
 
         private bool ProductValidation(ProductAddOrUpdateViewModel productViewModel)

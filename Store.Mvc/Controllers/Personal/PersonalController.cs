@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Store.Api.Interfaces;
-using Store.API.Models.Personal;
 using Store.Application.Dto.Administration;
 using Store.Domain.Interfaces;
 using Store.Domain.Models.ProductEntities;
+using Store.Mvc.Services.CartService;
+using Store.Mvc.Services.CartService.Models;
 using System.Text.Json;
 
 namespace Store.API.Controllers.Personal
@@ -70,7 +70,7 @@ namespace Store.API.Controllers.Personal
             };
             string serializedCartItems = JsonSerializer.Serialize(cartItems);
             Response.Cookies.Append(cartCookieKey, serializedCartItems, cookieOptions);
-            return RedirectToAction("Product", "Catalog", new { productArticle = article, colorName = colorName, sizeName = sizeName});
+            return RedirectToAction("product", "catalog", new { productArticle = article, colorName = colorName, sizeName = sizeName});
         }
 
         public IActionResult DeleteItemFromCart(string article, string colorName, string sizeName)
@@ -85,7 +85,7 @@ namespace Store.API.Controllers.Personal
             };
             string serializedCartItems = JsonSerializer.Serialize(cartItems);
             Response.Cookies.Append(cartCookieKey, serializedCartItems, cookieOptions);
-            return RedirectToAction("Cart");
+            return RedirectToAction("cart");
         }
 
         public IActionResult IncreaseQuantity(string article, string colorName, string sizeName)
@@ -99,7 +99,7 @@ namespace Store.API.Controllers.Personal
             };
             string serializedCartItems = JsonSerializer.Serialize(cartItems);
             Response.Cookies.Append(cartCookieKey, serializedCartItems, cookieOptions);
-            return RedirectToAction("Cart");
+            return RedirectToAction("cart");
         }
 
         public IActionResult ReduceQuantity(string article, string colorName, string sizeName)
@@ -121,7 +121,7 @@ namespace Store.API.Controllers.Personal
             };
             string serializedCartItems = JsonSerializer.Serialize(cartItems);
             Response.Cookies.Append(cartCookieKey, serializedCartItems, cookieOptions);
-            return RedirectToAction("Cart");
+            return RedirectToAction("cart");
         }
 
         private List<CookieCartItem> GetCookieCartItems()

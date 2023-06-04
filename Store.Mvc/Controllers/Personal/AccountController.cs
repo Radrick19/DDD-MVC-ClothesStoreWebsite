@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using SHA3.Net;
 using Store.API.ViewModels.Account;
-using Store.Application.Interfaces;
+using Store.Application.Services.CaptchaValidatorService;
 using Store.Domain.Enums;
 using Store.Domain.Interfaces;
 using Store.Domain.Models;
-using Store.MVC.Interfaces;
+using Store.Mvc.Services.EmailService;
 using System.Drawing.Printing;
 using System.Security.Claims;
 using System.Text;
@@ -22,10 +22,10 @@ namespace Store.API.Controllers.Personal
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _context;
         private readonly IEmailService _emailService;
-        private readonly ICaptchaValidator _captchaValidator;
+        private readonly ICaptchaValidatorService _captchaValidator;
 
         public AccountController(IRepository<User> userRepository, IUnitOfWork unitOfWork, IHttpContextAccessor context,
-            IEmailService emailService, ICaptchaValidator captchaValidator)
+            IEmailService emailService, ICaptchaValidatorService captchaValidator)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
@@ -43,7 +43,7 @@ namespace Store.API.Controllers.Personal
         [HttpPost]
         public async Task<IActionResult> Registration(RegistrationViewModel viewModel)
         {
-            if(!await _captchaValidator.ValidateAsync(viewModel.captchaToken))
+            if (!await _captchaValidator.ValidateAsync(viewModel.captchaToken))
             {
                 ModelState.AddModelError("", "Капча не пройдена");
                 return View(viewModel);
@@ -98,7 +98,7 @@ namespace Store.API.Controllers.Personal
         {
             if (!await _captchaValidator.ValidateAsync(viewModel.captchaToken))
             {
-                ModelState.AddModelError("", "Ошибка. Пройдите капчу");
+                ModelState.AddModelError("", "Капча не пройдена");
             }
             if (!ModelState.IsValid)
             {

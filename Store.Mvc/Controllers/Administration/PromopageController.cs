@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Store.API.ViewModels.Administration;
 using Store.Application.Dto.Administration;
-using Store.Application.Interfaces;
 using Store.Domain.Interfaces;
 using Store.Domain.Models;
+using Store.Mvc.Services.PicturesControlService;
+using Store.Mvc.Services.PicturesControlService.Enums;
 using System.Data;
 
 namespace Store.API.Controllers.Administration
@@ -16,10 +17,10 @@ namespace Store.API.Controllers.Administration
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<PromoPage> _promoPageRepository;
-        private readonly IPicturesControl _picturesControl;
+        private readonly IPicturesControlService _picturesControl;
         private readonly IMapper _mapper;
 
-        public PromopageController(IUnitOfWork unitOfWork, IRepository<PromoPage> promoPageRepository, IPicturesControl picturesControl, IMapper mapper)
+        public PromopageController(IUnitOfWork unitOfWork, IRepository<PromoPage> promoPageRepository, IPicturesControlService picturesControl, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _promoPageRepository = promoPageRepository;
@@ -72,7 +73,7 @@ namespace Store.API.Controllers.Administration
             {
                 try
                 {
-                    promoPageViewModel.PromoPage.PictureLink = await _picturesControl.UploadImage(promoPageViewModel.Image, "images/promo/");
+                    promoPageViewModel.PromoPage.PictureLink = await _picturesControl.UploadImage(promoPageViewModel.Image, PicturesType.PromoPages);
                 }
                 catch
                 {
@@ -115,7 +116,7 @@ namespace Store.API.Controllers.Administration
             {
                 try
                 {
-                    promoPageViewModel.PromoPage.PictureLink = await _picturesControl.UploadImage(promoPageViewModel.Image, "images/promo/");
+                    promoPageViewModel.PromoPage.PictureLink = await _picturesControl.UploadImage(promoPageViewModel.Image, PicturesType.PromoPages);
                 }
                 catch
                 {
