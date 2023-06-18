@@ -1,0 +1,21 @@
+﻿@using Store.Mvc.ViewModels.Menu;
+@{
+    @if(Model is SubcategoriesMenuViewModel)
+    {
+        @foreach (var item in Model.Subcategories)
+        {
+            <li><a asp-controller="catalog" asp-action="index" asp-route-categoryName="@Model.CategoryName" asp-route-subcategoryName="@item.Name">@item.DisplayName</a></li>
+        }
+    }
+    else
+    {
+        if (Model.IsForMobile)
+        {
+            <li><a asp-controller="catalog" asp-action="index" asp-route-categoryName="@Model.CategoryName">Вся одежда</a></li>
+        }
+        @foreach (var item in Model.Collections)
+        {
+            <li><a asp-controller="catalog" asp-action="index" asp-route-categoryName="@Model.CategoryName" asp-route-collectionName="@item.Name">@item.DisplayName</a></li>
+        }
+    }
+}

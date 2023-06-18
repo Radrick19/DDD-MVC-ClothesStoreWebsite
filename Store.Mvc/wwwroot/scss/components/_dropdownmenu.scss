@@ -7,23 +7,29 @@
 
     .content-wrapper {
         padding: 20px 0px;
-    }
-}
+        width: 100%;
 
-.drop-main-menu-content {
-    display: flex;
-    justify-content: space-around;
+        .drop-main-menu-content {
+            display: flex;
+            justify-content: space-around;
 
-.drop-main-menu-column {
-    display: flex;
-    flex-direction: column;
+            .drop-main-menu-column {
+                display: flex;
+                flex-direction: column;
 
-    ul {
-        margin-top: 30px;
+                ul {
+                    margin-top: 30px;
+                    display: flex;
+                    flex-direction: column;
 
-        li {
-            margin-bottom: 15px;
+                    li {
+                        margin-bottom: 15px;
+                        a:hover{
+                            color: dimgray;
+                        }
+                    }
+                }
+            }
         }
     }
-}
 }

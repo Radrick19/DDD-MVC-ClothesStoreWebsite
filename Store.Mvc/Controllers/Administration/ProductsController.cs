@@ -6,7 +6,7 @@ using Store.API.ViewModels.Administration;
 using Store.API.ViewModels.Catalog;
 using Store.Application.Dto.Administration;
 using Store.Application.Dto.Product;
-using Store.Application.Services.ArticleGeneratorSertvice;
+using Store.Application.Services.ArticleGeneratorService;
 using Store.Domain.Interfaces;
 using Store.Domain.Models.ManyToManyProductEntities;
 using Store.Domain.Models.ProductEntities;

@@ -33,34 +33,13 @@ namespace Store.Application.Services.DatabaseCleanerService
             _logger = logger;
         }
 
-        public async Task DeleteUnactivatedUsers()
+        public async Task StartCleaner()
         {
-            var users = await _userRepository
-                .GetQuary()
-                .Where(user => DateTime.UtcNow - user.RegistrationDate >= TimeSpan.FromMinutes(10) && !user.IsEmailConfirmed)
-                .ToListAsync();
-            await _unitOfWork.BeginTransaction();
-            foreach (var user in users)
-            {
-                _userRepository.Delete(user);
-            }
-            await _unitOfWork.SaveChangesAsync();
-            await _unitOfWork.CommitTransaction();
-        }
-
-        public async Task DeleteUnactiveConfirmHashes()
-        {
-            var userHashes = await _userEmailConfrimHashRepositrory
-                .GetQuary()
-                .Where(ue => DateTime.UtcNow - ue.CreationDate >= TimeSpan.FromMinutes(10))
-                .ToListAsync();
-            await _unitOfWork.BeginTransaction();
-            foreach (var userHash in userHashes)
-            {
-                _userEmailConfrimHashRepositrory.Delete(userHash);
-            }
-            await _unitOfWork.SaveChangesAsync();
-            await _unitOfWork.CommitTransaction();
+            await DeleteUnactivatedUsers();
+            await DeleteUnactiveConfirmHashes();
+            await DeleteUnusedAdditionalProductPictures();
+            await DeleteUnusedMainProductPictures();
+            await DeleteUnusedPromoBgPictures();
         }
 
         public async Task DeleteUnactivatedUser(int userId)
@@ -77,13 +56,43 @@ namespace Store.Application.Services.DatabaseCleanerService
                     await _unitOfWork.SaveChangesAsync();
                 }
             }
-            catch(NullReferenceException ex) 
+            catch (NullReferenceException ex)
             {
                 _logger.LogError("Can't execute (DeleteUnactivatedUserTask) :" + ex.Message);
             }
         }
 
-        public async Task DeleteUnusedAdditionalProductPictures()
+        private async Task DeleteUnactivatedUsers()
+        {
+            var users = await _userRepository
+                .GetQuary()
+                .Where(user => DateTime.UtcNow - user.RegistrationDate >= TimeSpan.FromMinutes(10) && !user.IsEmailConfirmed)
+                .ToListAsync();
+            await _unitOfWork.BeginTransaction();
+            foreach (var user in users)
+            {
+                _userRepository.Delete(user);
+            }
+            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.CommitTransaction();
+        }
+
+        private async Task DeleteUnactiveConfirmHashes()
+        {
+            var userHashes = await _userEmailConfrimHashRepositrory
+                .GetQuary()
+                .Where(ue => DateTime.UtcNow - ue.CreationDate >= TimeSpan.FromMinutes(10))
+                .ToListAsync();
+            await _unitOfWork.BeginTransaction();
+            foreach (var userHash in userHashes)
+            {
+                _userEmailConfrimHashRepositrory.Delete(userHash);
+            }
+            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.CommitTransaction();
+        }
+
+        private async Task DeleteUnusedAdditionalProductPictures()
         {
             var pictures = new DirectoryInfo(Path.Combine(_webHostEnvironment.WebRootPath, "images/additional")).GetFiles();
             var productsPictures = await _productRepository.GetQuary().Select(prod => prod.AdditionalPictures).ToListAsync();
@@ -106,7 +115,7 @@ namespace Store.Application.Services.DatabaseCleanerService
             }
         }
 
-        public async Task DeleteUnusedMainProductPictures()
+        private async Task DeleteUnusedMainProductPictures()
         {
             var pictures = new DirectoryInfo(Path.Combine(_webHostEnvironment.WebRootPath, "images/main")).GetFiles();
             var pictureLinks = await _productRepository.GetQuary().Select(prod => prod.MainPicture).ToListAsync();
@@ -120,7 +129,7 @@ namespace Store.Application.Services.DatabaseCleanerService
             }
         }
 
-        public async Task DeleteUnusedPromoBgPictures()
+        private async Task DeleteUnusedPromoBgPictures()
         {
             var pictures = new DirectoryInfo(Path.Combine(_webHostEnvironment.WebRootPath, "images/promo")).GetFiles();
             var pictureLinks = await _promoPageRepository.GetQuary().Select(promo => promo.PictureLink).ToListAsync();

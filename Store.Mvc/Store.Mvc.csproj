@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
-    <None Include="wwwroot\scripts\mainmenu.js" />
+    <None Include="wwwroot\scripts\objects\mobilemenu.js" />
   </ItemGroup>
 
   <ItemGroup>

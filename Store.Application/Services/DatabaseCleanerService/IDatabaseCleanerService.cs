@@ -11,10 +11,6 @@ namespace Store.Application.Services.DatabaseCleanerService
     public interface IDatabaseCleanerService
     {
         Task DeleteUnactivatedUser(int userId);
-        Task DeleteUnactiveConfirmHashes();
-        Task DeleteUnactivatedUsers();
-        Task DeleteUnusedMainProductPictures();
-        Task DeleteUnusedAdditionalProductPictures();
-        Task DeleteUnusedPromoBgPictures();
+        Task StartCleaner();
     }
 }

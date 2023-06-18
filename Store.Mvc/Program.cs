@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Web;
 using Store.Application.AutoMapper;
-using Store.Application.Services.ArticleGeneratorSertvice;
+using Store.Application.Services.ArticleGeneratorService;
 using Store.Application.Services.CaptchaValidatorService;
 using Store.Application.Services.DatabaseCleanerService;
 using Store.Application.Services.ProductPopularityService;
@@ -63,6 +63,8 @@ builder.Services.AddTransient<IRepository<CollectionProduct>, CollectionProductR
 
 builder.Services.AddTransient<IRepository<Subcategory>, SubcategoryRepository>();
 
+builder.Services.AddTransient<IRepository<ClothingCollection>, CollectionRepository>();
+
 builder.Services.AddTransient<IRepository<UserEmailConfirmationHash>, UserEmailConfirmationHashRepository>();
 
 builder.Services.AddTransient<IEmailService, EmailService>();
@@ -114,11 +116,7 @@ try
 
     app.UseStaticFiles();
 
-    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnactiveConfirmHashes(), Cron.Daily);
-    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnactivatedUsers(), Cron.Daily);
-    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnusedMainProductPictures(), Cron.Daily);
-    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnusedAdditionalProductPictures(), Cron.Daily);
-    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnusedPromoBgPictures(), Cron.Daily);
+    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.StartCleaner(), Cron.Daily);
 
     app.Run();
 }

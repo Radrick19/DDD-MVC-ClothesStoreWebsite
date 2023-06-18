@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Store.Application.Services.ArticleGeneratorSertvice
+namespace Store.Application.Services.ArticleGeneratorService
 {
     public class ArticleGeneratorService : IArticleGeneratorService
     {
@@ -19,19 +19,19 @@ namespace Store.Application.Services.ArticleGeneratorSertvice
 
         public string Generate()
         {
-            StringBuilder articleBuilder = new StringBuilder();
-            string returnResult = string.Empty;
-            while (articleBuilder.Length < 6)
+            StringBuilder stringBuilder = new StringBuilder();
+            string articleResult = string.Empty;
+            while (stringBuilder.Length < 6)
             {
                 Random random = new Random();
-                articleBuilder.Append(random.Next(0, 10));
+                stringBuilder.Append(random.Next(0, 10));
             }
-            returnResult = articleBuilder.ToString();
-            if (_productRepository.GetQuary().Select(prod => prod.Article).Any(article => article == returnResult))
+            articleResult = stringBuilder.ToString();
+            if (_productRepository.GetQuary().Select(prod => prod.Article).Any(article => article == articleResult))
             {
-                returnResult = Generate();
+                articleResult = Generate();
             }
-            return returnResult;
+            return articleResult;
         }
     }
 }

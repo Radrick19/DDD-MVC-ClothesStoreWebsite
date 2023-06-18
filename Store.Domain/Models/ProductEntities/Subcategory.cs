@@ -21,6 +21,8 @@ namespace Store.Domain.Models.ProductEntities
 
         public virtual int Order { get; set; }
 
+        public virtual ICollection<Product> Products { get; set; }
+
         protected Subcategory()
         {
             
