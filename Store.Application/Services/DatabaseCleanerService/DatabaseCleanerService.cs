@@ -1,15 +1,12 @@
-﻿using Hangfire;
+﻿using AutoMapper;
+using Hangfire;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Store.Application.Dto.Account;
 using Store.Domain.Interfaces;
 using Store.Domain.Models;
 using Store.Domain.Models.ProductEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Store.Application.Services.DatabaseCleanerService
 {
@@ -21,8 +18,10 @@ namespace Store.Application.Services.DatabaseCleanerService
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<UserEmailConfirmationHash> _userEmailConfrimHashRepositrory;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public DatabaseCleanerService(IUnitOfWork unitOfWork, IRepository<User> userRepository, IRepository<UserEmailConfirmationHash> userEmailConfrimHashRepositrory, IWebHostEnvironment webHostEnvironment, IRepository<Product> productRepository, IRepository<PromoPage> promoPageRepository)
+        public DatabaseCleanerService(IUnitOfWork unitOfWork, IRepository<User> userRepository, IRepository<UserEmailConfirmationHash> userEmailConfrimHashRepositrory, IWebHostEnvironment webHostEnvironment, IRepository<Product> productRepository, IRepository<PromoPage> promoPageRepository, IMapper mapper, ILogger<DatabaseCleanerService> logger)
         {
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
@@ -30,12 +29,8 @@ namespace Store.Application.Services.DatabaseCleanerService
             _webHostEnvironment = webHostEnvironment;
             _productRepository = productRepository;
             _promoPageRepository = promoPageRepository;
-
-            RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnactiveConfirmHashes(), Cron.Daily);
-            RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnactivatedUsers(), Cron.Daily);
-            RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnusedMainProductPictures(), Cron.Daily);
-            RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnusedAdditionalProductPictures(), Cron.Daily);
-            RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnusedPromoBgPictures(), Cron.Daily);
+            _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task DeleteUnactivatedUsers()
@@ -72,9 +67,9 @@ namespace Store.Application.Services.DatabaseCleanerService
         {
             try
             {
-                var userAndConfirmHash = await _userEmailConfrimHashRepositrory.FirstOrDefaultAsync(ue => ue.UserId == userId);
+                var userAndConfirmHash = _mapper.Map<UserDto>(await _userEmailConfrimHashRepositrory.FirstOrDefaultAsync(ue => ue.UserId == userId));
                 var user = await _userRepository.FirstOrDefaultAsync(u => u.Id == userId);
-                _userEmailConfrimHashRepositrory.Delete(userAndConfirmHash);
+                await _userEmailConfrimHashRepositrory.DeleteAsync(userAndConfirmHash.Id);
                 await _unitOfWork.SaveChangesAsync();
                 if (!user.IsEmailConfirmed)
                 {
@@ -82,9 +77,9 @@ namespace Store.Application.Services.DatabaseCleanerService
                     await _unitOfWork.SaveChangesAsync();
                 }
             }
-            catch
+            catch(NullReferenceException ex) 
             {
-                return;
+                _logger.LogError("Can't execute (DeleteUnactivatedUserTask) :" + ex.Message);
             }
         }
 

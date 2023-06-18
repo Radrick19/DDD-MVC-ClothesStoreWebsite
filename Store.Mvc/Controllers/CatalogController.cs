@@ -8,11 +8,9 @@ using Store.Application.Dto.Administration;
 using Store.Application.Dto.Product;
 using Store.Application.Enums;
 using Store.Application.Services.ProductPopularityService;
-using Store.Domain.Infrastructure;
 using Store.Domain.Interfaces;
 using Store.Domain.Models.ProductEntities;
 using System.Net;
-using System.Runtime.CompilerServices;
 
 namespace Store.Controllers
 {

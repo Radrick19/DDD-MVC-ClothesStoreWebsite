@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SHA3.Net;
 using Store.API.ViewModels.Account;
+using Store.Application.Dto.Account;
 using Store.Domain.Enums;
 using Store.Domain.Interfaces;
 using Store.Domain.Models;
@@ -17,11 +19,13 @@ namespace Store.API.Controllers.Administration
     {
         private readonly IRepository<User> _userRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public AdminController(IRepository<User> userRepository, IUnitOfWork unitOfWork)
+        public AdminController(IRepository<User> userRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -56,7 +60,7 @@ namespace Store.API.Controllers.Administration
                     string inputPassHash = Convert.ToBase64String(shaAlg.ComputeHash(Encoding.UTF8.GetBytes(viewModel.Password)));
                     hash = Convert.ToBase64String(shaAlg.ComputeHash(Encoding.UTF8.GetBytes(inputPassHash + salt)));
                 }
-                var user = new User
+                var user = new UserDto
                 {
                     Login = viewModel.Login,
                     Email = viewModel.Email,
@@ -67,7 +71,7 @@ namespace Store.API.Controllers.Administration
                     IsEmailConfirmed = true,
                     RegistrationDate = DateTime.UtcNow
                 };
-                await _userRepository.AddAsync(user);
+                await _userRepository.AddAsync(_mapper.Map<User>(user));
                 await _unitOfWork.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

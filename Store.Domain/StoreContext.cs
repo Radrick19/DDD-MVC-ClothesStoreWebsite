@@ -101,7 +101,6 @@ namespace Store.Domain
                 .Entity<User>()
                 .Property(user => user.UserRole)
                 .HasConversion(new EnumToStringConverter<UserRole>());
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -119,7 +118,6 @@ namespace Store.Domain
         public StoreContext()
         {
             Database.Migrate();
-            //Database.EnsureCreated();
         }
     }
 }

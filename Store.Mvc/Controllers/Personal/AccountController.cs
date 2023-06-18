@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using SHA3.Net;
 using Store.API.ViewModels.Account;
+using Store.Application.Dto.Account;
 using Store.Application.Services.CaptchaValidatorService;
 using Store.Domain.Enums;
 using Store.Domain.Interfaces;
@@ -23,15 +25,17 @@ namespace Store.API.Controllers.Personal
         private readonly IHttpContextAccessor _context;
         private readonly IEmailService _emailService;
         private readonly ICaptchaValidatorService _captchaValidator;
+        private readonly IMapper _mapper;
 
         public AccountController(IRepository<User> userRepository, IUnitOfWork unitOfWork, IHttpContextAccessor context,
-            IEmailService emailService, ICaptchaValidatorService captchaValidator)
+            IEmailService emailService, ICaptchaValidatorService captchaValidator, IMapper mapper)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _context = context;
             _emailService = emailService;
             _captchaValidator = captchaValidator;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -72,14 +76,24 @@ namespace Store.API.Controllers.Personal
                     Password = hash,
                     Guid = Guid.NewGuid(),
                     Salt = salt,
-                    UserRole = UserRole.Customer,
+                    UserRole = UserRole.Customer, 
                     IsEmailConfirmed = false,
                     RegistrationDate = DateTime.UtcNow, 
                 };
-                await _userRepository.AddAsync(user);
-                await _unitOfWork.SaveChangesAsync();
-                await _emailService.SendEmailConfirmAsync(viewModel.Email, user);
-                return RedirectToAction("Index", "Message", new { text = "Сообщение с подтверждением отправлено вам на почту" });
+                try
+                {
+                    await _unitOfWork.BeginTransaction();
+                    await _userRepository.AddAsync(user);
+                    await _unitOfWork.SaveChangesAsync();
+                    await _emailService.SendEmailConfirmAsync(viewModel.Email, user.Id);
+                    await _unitOfWork.CommitTransaction();
+                    return RedirectToAction("Index", "Message", new { text = "Сообщение с подтверждением отправлено вам на почту" });
+                }
+                catch(Exception ex)
+                {
+                    await _unitOfWork.RollbackTransaction();
+                    return RedirectToAction("ErrorMessage", "Error", new { text = "Ошибка при регистрации" });
+                }
             }
             return View(viewModel);
         }
@@ -117,7 +131,7 @@ namespace Store.API.Controllers.Personal
             }
             else
             {
-                var user = await _userRepository.FirstOrDefaultAsync(user => user.Login.ToLower() == viewModel.LoginOrEmail.ToLower() || user.Email.ToLower() == viewModel.LoginOrEmail.ToLower());
+                var user = _mapper.Map<UserDto>(await _userRepository.FirstOrDefaultAsync(user => user.Login.ToLower() == viewModel.LoginOrEmail.ToLower() || user.Email.ToLower() == viewModel.LoginOrEmail.ToLower()));
                 if(!user.IsEmailConfirmed)
                 {
                     ModelState.AddModelError("", "Подтвердите аккаунт с помощью сообщения на почте");

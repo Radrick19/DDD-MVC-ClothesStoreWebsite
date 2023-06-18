@@ -11,6 +11,7 @@ namespace Store.API.ViewModels.Account
 
         [Required(ErrorMessage = "Укажите пароль")]
         [StringLength(40, ErrorMessage = "Слишком длинный пароль")]
+        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", ErrorMessage = "Пароль должен быть не менее чем из 8 символов. Должна быть: одна заглавная буква и минимум одна цифра")]
         public string Password { get; set; }
 
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]

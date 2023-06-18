@@ -394,7 +394,6 @@ footer .links-row {
   flex-wrap: wrap;
 }
 footer .links-row a {
-  margin-bottom: 5px;
   font-size: 14px;
   padding-bottom: 10px;
   color: #808080;
@@ -901,6 +900,9 @@ footer .links-row a:last-child:after {
 
 .login-input-field {
   margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /**/

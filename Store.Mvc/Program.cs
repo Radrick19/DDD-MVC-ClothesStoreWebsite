@@ -114,6 +114,12 @@ try
 
     app.UseStaticFiles();
 
+    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnactiveConfirmHashes(), Cron.Daily);
+    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnactivatedUsers(), Cron.Daily);
+    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnusedMainProductPictures(), Cron.Daily);
+    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnusedAdditionalProductPictures(), Cron.Daily);
+    RecurringJob.AddOrUpdate<IDatabaseCleanerService>(service => service.DeleteUnusedPromoBgPictures(), Cron.Daily);
+
     app.Run();
 }
 catch (Exception ex)
