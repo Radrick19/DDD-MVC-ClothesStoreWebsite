@@ -12,31 +12,30 @@
 @import "components/_mobiledropdownmenu.scss";
 @import "components/_mainmenuactions.scss";
 
-
 body {
-    background-color: #ffffff;
-    font-family: Segoe UI, Helvetica, Arial, sans-serif;
+  background-color: #ffffff;
+  font-family: Segoe UI, Helvetica, Arial, sans-serif;
 }
 
 .content-wrapper {
-    max-width: $max-page-width;
-    margin-left: auto;
-    margin-right: auto;
+  max-width: $max-page-width;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .content {
-    padding-right: $space-page-padding;
-    padding-left: $space-page-padding;
+  padding-right: $space-page-padding;
+  padding-left: $space-page-padding;
 }
 
 .main-content {
-    padding-top: $height-header;
+  padding-top: $height-header;
 }
 
-a{
-    font-size: 14px;
+a {
+  font-size: 14px;
 }
 
-h3{
-    font-size: 16px;
+h3 {
+  font-size: 16px;
 }

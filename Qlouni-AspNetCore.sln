@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DA8BDBB0-C10
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		.prettierc.json = .prettierc.json
+		.prettierignore = .prettierignore
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Mvc", "Store.Mvc\Store.Mvc.csproj", "{26F40652-6A22-4B01-B3B7-3B1167724E72}"

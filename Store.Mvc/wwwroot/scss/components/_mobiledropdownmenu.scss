@@ -1,59 +1,59 @@
 @import "../_vars.scss";
 .button-drop-main-menu {
-    z-index: 4;
-    position: absolute;
+  z-index: 4;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  padding: 20px 0px;
+  background-color: $main-bg-color;
+  box-shadow: 0px 2px 5px 1px rgba(1, 0, 0, 0.2);
+  display: none;
+
+  @media only screen and (min-width: 1000px) {
+    display: none !important;
+  }
+
+  .mobile-dropdown-menu {
     width: 100%;
-    height: 100vh;
-    padding: 20px 0px;
-    background-color: $main-bg-color;
-    box-shadow: 0px 2px 5px 1px rgba(1, 0, 0, 0.2);
-    display: none;
+    display: flex;
+    flex-direction: column;
 
-    @media only screen and (min-width: 1000px) {
-        display: none !important;
+    .backbutton-and-info {
+      min-width: 330px;
+      display: none;
+      justify-content: space-between;
+      margin-bottom: 10px;
+
+      .backbutton {
+        height: 35px;
+        width: 35px;
+        cursor: pointer;
+      }
+
+      .info {
+        h4 {
+          font-size: 14px;
+        }
+      }
     }
 
-    .mobile-dropdown-menu {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
+    .selection {
+      display: none;
+      flex-direction: column;
 
-        .backbutton-and-info {
-            min-width: 330px;
-            display: none;
-            justify-content: space-between;
-            margin-bottom: 10px;
+      li {
+        list-style: none;
+        margin-bottom: 10px;
+      }
 
-            .backbutton {
-                height: 35px;
-                width: 35px;
-                cursor: pointer;
-            }
+      a {
+        font-size: 22px;
+        cursor: pointer;
 
-            .info {
-                h4 {
-                    font-size: 14px;
-                }
-            }
+        &:hover {
+          color: dimgray;
         }
-
-        .selection {
-            display: none;
-            flex-direction: column;
-
-            li {
-                list-style: none;
-                margin-bottom: 10px;
-            }
-
-            a {
-                font-size: 22px;
-                cursor: pointer;
-
-                &:hover {
-                    color: dimgray;
-                }
-            }
-        }
+      }
     }
+  }
 }

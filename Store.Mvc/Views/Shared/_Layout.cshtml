@@ -22,39 +22,39 @@
 </head>
 <body>
     <header>
-            <div class="content-wrapper">
-                <div class="content">
-                    <div class="main-menu-container">
-                        <div class="main-menu-category-logo">
-                        <a asp-controller="Home" asp-action="Index"><img src="/images/logos/MainLogo.jpg" /></a>
-                            <ul>
-                            <li class="main-menu-category-link" id="Women"><a href="/catalog/women" class="category-name"><p>ЖЕНЩИНЫ</p></a></li>
-                            <li class="main-menu-category-link" id="Men"><a href="/catalog/men" class="category-name"><p>МУЖЧИНЫ</p></a></li>
-                            <li class="main-menu-category-link" id="Kids"><a href="/catalog/kids" class="category-name"><p>ДЕТИ</p></a></li>
-                            <li class="main-menu-category-link" id="Baby"><a href="/catalog/baby" class="category-name"><p>МЛАДЕНЦЫ</p></a></li>
-                            </ul>
-                        </div>
-                        <div class="main-menu-searchbar">
-                            <form asp-controller="Catalog" asp-action="Search">
-                                <input name="searchText" class="search-input" required />
-                                <input class="search-button" type="submit" value="" />
-                            </form>
-                        </div>
-                    @await Component.InvokeAsync("MainMenuActions")
+        <div class="content-wrapper">
+            <div class="content">
+                <div class="main-menu-container">
+                    <div class="main-menu-category-logo">
+                    <a asp-controller="Home" asp-action="Index"><img src="/images/logos/MainLogo.jpg" /></a>
+                        <ul>
+                        <li class="main-menu-category-link" id="Women"><a href="/catalog/women" class="category-name"><p>ЖЕНЩИНЫ</p></a></li>
+                        <li class="main-menu-category-link" id="Men"><a href="/catalog/men" class="category-name"><p>МУЖЧИНЫ</p></a></li>
+                        <li class="main-menu-category-link" id="Kids"><a href="/catalog/kids" class="category-name"><p>ДЕТИ</p></a></li>
+                        <li class="main-menu-category-link" id="Baby"><a href="/catalog/baby" class="category-name"><p>МЛАДЕНЦЫ</p></a></li>
+                        </ul>
                     </div>
-                    <div class="mobile-search">
+                    <div class="main-menu-searchbar">
                         <form asp-controller="Catalog" asp-action="Search">
                             <input name="searchText" class="search-input" required />
                             <input class="search-button" type="submit" value="" />
-                            <a class="close-mobile-search-button">
-                                <img src="/images/icons/close.png" />
-                            </a>
                         </form>
                     </div>
+                @await Component.InvokeAsync("MainMenuActions")
                 </div>
+                <div class="mobile-search">
+                    <form asp-controller="Catalog" asp-action="Search">
+                        <input name="searchText" class="search-input" required />
+                        <input class="search-button" type="submit" value="" />
+                        <a class="close-mobile-search-button">
+                            <img src="/images/icons/close.png" />
+                        </a>
+                    </form>
+                </div>
+            </div>
         </div>
-        @await Html.PartialAsync("GetMenu")
-        @await Html.PartialAsync("GetMobileMenu")
+    @await Html.PartialAsync("GetMenu")
+    @await Html.PartialAsync("GetMobileMenu")
     </header>
     <div class="main-content">
         @RenderBody()

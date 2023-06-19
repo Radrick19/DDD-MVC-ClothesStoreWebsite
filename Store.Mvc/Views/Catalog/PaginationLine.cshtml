@@ -14,7 +14,7 @@
         {
             <li class="page-item">
                 @{ int prevPage = Model.TotalPage - 1;}
-                <a href="#" class="page-link" onclick="ChangePage(@prevPage)">
+                <a href="#" class="page-link" onclick="UpdatePages(@prevPage)">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
@@ -24,7 +24,7 @@
             if(Model.TotalPage == i)
             {
                 <li class="page-item active">
-                    <a href="#" onclick="ChangePage(@i)" class="page-link">
+                    <a href="#" onclick="UpdatePages(@i)" class="page-link">
                         @i
                     </a>
                 </li>
@@ -32,7 +32,7 @@
             else
             {
                 <li class="page-item">
-                    <a href="#" onclick="ChangePage(@i)" class="page-link">
+                    <a href="#" onclick="UpdatePages(@i)" class="page-link">
                         @i
                     </a>
                 </li>
@@ -52,7 +52,7 @@
                 @{
                     int nextPage = Model.TotalPage + 1;
                 }
-                <a href="#" class="page-link" onclick="ChangePage(@nextPage)">
+                <a href="#" class="page-link" onclick="UpdatePages(@nextPage)">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
