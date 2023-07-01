@@ -15,6 +15,7 @@ Functionality:
 - Administration(add products, colors, collections, categories)
 
 Tecnologies:
+
 backend
 - c# .net 6 ( Asp.net core )
 
