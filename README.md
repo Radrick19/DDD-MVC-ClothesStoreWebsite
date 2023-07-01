@@ -1,5 +1,5 @@
 <div align="center">
-      <h1> <img src="https://cdn-icons-png.flaticon.com/256/1028/1028537.png" width="80px"><br/>Ddd-mvc Магазин одежды</h1>
+      <h1> <img src="https://cdn-icons-png.flaticon.com/256/1028/1028537.png" width="80px"><br/>Ddd-mvc Clothes store</h1>
      </div>
 
 
