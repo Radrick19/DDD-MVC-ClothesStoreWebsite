@@ -17,6 +17,7 @@ Functionality:
 Tecnologies:
 backend
 - c# .net 6 ( Asp.net core )
+
 frontend
 - HTML5, SCSS, basic js + JQuery
 
