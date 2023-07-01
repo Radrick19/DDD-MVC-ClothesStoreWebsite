@@ -23,7 +23,7 @@ backend
 frontend
 - HTML5, SCSS, basic js + JQuery
 
-Third-party frameworks:
+third-party frameworks:
 - Select2
 - Hangfire
 
