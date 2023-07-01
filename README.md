@@ -11,8 +11,9 @@ Functionality:
 - Product catalog
 - Personal cart
 - Product details
-- Login/Registration
+- Login/Registration (with email confirmation)
 - Administration(add products, colors, collections, categories)
+- Autocleaning unused data with Hangfire
 
 Tecnologies:
 
@@ -21,6 +22,10 @@ backend
 
 frontend
 - HTML5, SCSS, basic js + JQuery
+
+Third-party frameworks:
+- Select2
+- Hangfire
 
 Database - PostgreSQL
 # Screenshots
