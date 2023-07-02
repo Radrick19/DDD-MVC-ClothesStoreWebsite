@@ -26,6 +26,7 @@ frontend
 third-party frameworks:
 - Select2
 - Hangfire
+- Splider
 
 Database - PostgreSQL
 # Screenshots
